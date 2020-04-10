@@ -1,22 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://kingingwang.github.io/</id>
-    <title>KingingWang</title>
-    <updated>2020-04-10T15:10:24.060Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://kingingwang.github.io/"/>
-    <link rel="self" href="https://kingingwang.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://kingingwang.github.io/images/avatar.png</logo>
-    <icon>https://kingingwang.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, KingingWang</rights>
-    <entry>
-        <title type="html"><![CDATA[Zigbee学习记录]]></title>
-        <id>https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-10T14:48:31.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-zigbee介绍">1 Zigbee介绍</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Zigbee学习记录 | KingingWang</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586531410300">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://kingingwang.github.io//styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://kingingwang.github.io/">KingingWang</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                列表
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Zigbee学习记录</h1>
+            <p class="article-meta">
+              2020-04-10
+              
+                <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge success">
+                  zigbee
+                </a>
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="1-zigbee介绍">1 Zigbee介绍</h1>
 <h2 id="11-zigbee-简介">1.1 ZigBee 简介</h2>
 <p>Zigbee 是基于 IEEE802.15.4 标准的低功耗个域网协议。根据这个协议规定的技术是一种短距离、低功耗的无线通信技术。这一名称来源于蜜蜂的八字舞，由于蜜蜂(bee)是靠飞翔和“嗡嗡”(zig)地抖动翅膀的“舞蹈”来与同伴传递花粉所在方位信息，也就是说蜜蜂依靠这样的方式构成了群体中的通信网络。其特点是近距离、低复杂度、自组织、低功耗、低数据速率、低成本。主要适合用于自动控制和远程控制领域，可以嵌入各种设备。简而言之，ZigBee 就是一种便宜的，低功耗的近距离无线组网通讯技术。国内通常会翻译成“紫蜂”。<br>
 相信大部分人开始时会以为 Zigbee 是一类无线模块，我一开始也是这么的认为，所以当我首次看到 Zigbee 产品时，第一时间找它上面的 MCU，还真想知道用什么单片机来控制这东西，找了半天没发现，一头雾水。最后才发现，原来们 CC2530 芯片上集成了 8051 内核，里面集成了一片增强型的 51 单片机。</p>
@@ -747,6 +823,88 @@ SampleApp_SendPeriodicMessage(&quot;not on fire\n&quot;,13);//发送火焰传感
 <p>图3.2.29 修改前</p>
 <p>图3.2.30 修改后<br>
 这样我们的路由器控制火焰传感器的代码就修改好了，可以把代码烧录到开发板中。</p>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://kingingwang.github.io//images/avatar.png?v=1586531410300" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/">Zigbee学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/about/">关于</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge warning">
+          zigbee
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://kingingwang.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
