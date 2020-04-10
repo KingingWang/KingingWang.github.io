@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kingingwang.github.io/</id>
-    <title>Gridea</title>
-    <updated>2020-04-10T14:40:45.028Z</updated>
+    <title>KingingWang</title>
+    <updated>2020-04-10T14:42:39.078Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kingingwang.github.io/"/>
     <link rel="self" href="https://kingingwang.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://kingingwang.github.io/images/avatar.png</logo>
     <icon>https://kingingwang.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Gridea</rights>
+    <rights>All rights reserved 2020, KingingWang</rights>
 </feed>
