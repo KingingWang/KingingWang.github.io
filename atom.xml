@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kingingwang.github.io/</id>
     <title>KingingWang</title>
-    <updated>2020-04-11T01:30:16.112Z</updated>
+    <updated>2020-04-11T11:48:43.414Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kingingwang.github.io/"/>
     <link rel="self" href="https://kingingwang.github.io/atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>https://kingingwang.github.io/images/avatar.png</logo>
     <icon>https://kingingwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, KingingWang</rights>
+    <entry>
+        <title type="html"><![CDATA[51单片机与proteus学习记录]]></title>
+        <id>https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:20:52.000Z</updated>
+        <content type="html"><![CDATA[<p>51</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ESP8266学习记录]]></title>
         <id>https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/</id>
