@@ -7,7 +7,7 @@
 <meta name="description" content="时时勤拂拭，勿使染尘埃">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586614774925">
+<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586615197576">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -106,7 +106,7 @@
 <p>相信大部分人开始时会以为 Zigbee 是一类无线模块，我一开始也是这么的认为，所以当我首次看到 Zigbee 产品时，第一时间找它上面的 MCU，还真想知道用什么单片机来控制这东西，找了半天没发现，一头雾水。最后才发现，原来们 CC2530 芯片上集成了 8051 内核，里面集成了一片增强型的 51 单片机。</p>
 <h2 id="zigbee开发板">Zigbee开发板</h2>
 <p>此开发板体积小，重量轻，引出部分 IO 口，标准 2.54 排针接口。可直 接应用在万用板或自制 PCB 上。模块使用PCB天线，可靠传输距离达10米。如图1.2.1所示：</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image3.jpeg" alt="IMG_20191120_151436" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.217361111111111in&quot;}</p>
+<figure data-type="image" tabindex="1"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image3.jpeg" alt="IMG_20191120_151436" loading="lazy"></figure>
 <ol>
 <li>CC2530 开发板</li>
 </ol>
@@ -115,52 +115,52 @@
 <p>记得以前我们学习 51 单片机的时候用得最多的是 KEIL 了，类似，这里我们使用 IAR 8.20，IAR开发最大优势就是能够直接使用TI公司提供的协议栈Z-Stack进行开发，我们只需要调用API接口函数，即可简单方便的控制zigbee。</p>
 <p>这里我们选用ZStack-CC2530-2.5.1a协议栈，大家可能会有疑问了，TI官方的协议栈不是已经更新到Z-STACK 3.0.2了吗？为什么我们还要使用老版本呢？那是因为最新版本的协议栈占用内存资源相当的多，而我们的CC2530芯片只有8k的SRAM。一旦使用了最新版本的协议栈，那么留给开发者使用的内存资源将相当的有限（别问我为什么不使用更高级的芯片）。特别不适合初学者使用。所以我们将使用ZStack-CC2530-2.5.1a协议栈。</p>
 <p>我们使用IAR8.2版本，具体安装方法见《IAR安装步骤》。安装完成后界面如下图1.3.1。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image4.png" alt="" loading="lazy">{width=&quot;5.754861111111111in&quot; height=&quot;3.1055555555555556in&quot;}</p>
-<ol start="2">
+<figure data-type="image" tabindex="2"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image4.png" alt="" loading="lazy"></figure>
+<ol>
 <li>IAR 8.20 软件界面：</li>
 </ol>
 <h3 id="协议栈安装">协议栈安装</h3>
 <p>TI协议栈 Zstack-CC2530-2.5.1a 安装方法：Z-stack 的安装比较简单，同样安装在默认路径。协议栈安装完成后在图这个路径（C 盘为系统盘），里面包含了例程和工具。</p>
 <h3 id="ccdebug驱动安装">CCdebug驱动安装</h3>
 <p>驱动路径在ZStack-CC2530-2.5.1a\Components\hal\target\CC2530USB\usb\driver，如图1.3.2。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image5.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
-<ol start="3">
+<figure data-type="image" tabindex="3"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image5.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>安装完成后，重新拔插仿真器，在设备管理器里找到 Chipcon SRF04EB，说明驱动安装完成，如图1.3.3所示。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image6.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;2.29375in&quot;}</p>
-<ol start="4">
+<figure data-type="image" tabindex="4"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image6.png" alt="" loading="lazy"></figure>
+<ol>
 <li>驱动安装完成</li>
 </ol>
 <h3 id="连接开发板">连接开发板</h3>
 <p>连接 CC2530 开发板，按下 DEBUGGER 复位键，芯片指示灯亮（表示检测到开发板上 CC2530芯片），则完成连接工作（注意右侧开关要打开）。如图1.3.4所示。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image7.jpeg" alt="IMG_20191120_155713" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.176388888888889in&quot;}</p>
-<ol start="5">
+<p>![IMG_20191120_155713](file://C:/Users/zihao/Documents/Gridea/zigbee2.5图片/</p>
+<ol>
 <li>芯片指示灯亮</li>
 </ol>
 <h3 id="usb-转串口驱动的安装">USB 转串口驱动的安装</h3>
 <p>ZigBee 所有开发板上集成CH340的USB转串口芯片，我们通过安装相应的驱动可通过USB直接开发调试。打开CH340驱动软件直接进行安装。（装时候建议 USB 线不连接 zigbee 开发板！）</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image8.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;2.2930555555555556in&quot;}</p>
-<ol start="6">
+<figure data-type="image" tabindex="5"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image8.png" alt="" loading="lazy"></figure>
+<ol>
 <li>成功安装驱动</li>
 </ol>
 <h1 id="组网">组网</h1>
 <h2 id="zigbee-协议栈简介">Zigbee 协议栈简介</h2>
 <p>本节内容仅仅是对 ZigBee 协议栈的一些大家必须理解清楚的概念进行简单 的讲解，并有对 ZigBee 协议栈的构成及工作原理进行详细的讨论。让刚接触 ZigBee 协议栈的朋友们对它有个初步的感性认识，有助于后面使用 ZigBee 协议 栈进行真正的项目开发。 什么是ZigBee 协议栈呢？它和 ZigBee 协议有什么关系呢 协议是一系列的通信标准，通信双方需要共同按照这一标准进行正常的数据 发射和接收。协议栈是协议的具体实现形式，通俗点来理解就是协议栈是协议和 用户之间的一个接口，开发人员通过使用协议栈来使用这个议的，进而实现无线数据收发。 图图2.1.1展示了 ZigBee 无线网络协议层的架构图。ZigBee 协议分为两部分，IEEE 802.15.4 定义了 PHY（物理层）和 MAC（介质访问层）技术规范；ZigBee 联盟定义了NWK（网络层）、APS（应用程序支持子层）、APL（应用层）技术规范。ZigBee 协议栈就是将各个层定义的协议都集合在一起，以函数的形式实现，并给用户提供 API(应用层)，用户可以直接调用。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image9.png" alt="" loading="lazy">{width=&quot;4.7243055555555555in&quot; height=&quot;2.8444444444444446in&quot;}</p>
-<ol start="7">
+<figure data-type="image" tabindex="6"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image9.png" alt="" loading="lazy"></figure>
+<ol>
 <li>ZigBee 无线网络协议层</li>
 </ol>
 <p>在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。介绍到这里，大家应该清楚协议和协议栈的关系了吧，是不是会想着怎么样才能用协议栈来开发自己的项目呢？技术总是不断地在发展地，我们可以用 ZigBee 厂商提供的协议栈软件来方便地使用 ZigBee 协议栈。Z-stack 是挪威半导体公司 Chipcon(目前已经被 TI 公司收购)推出其 CC2430开发平台时，推出的一款业界领先的商业级协议栈软件，由于这个协议栈软件的出现，用户可以很容易地开发出具体的应用程序来，也就是大家说的掌握 10 个函数就能使用ZigBee 通讯的原因。它使用瑞典公司 IAR 开发的 IAR Embedded Workbench for MCS-51 作为它的集成开发环境。Chipcon 公司为自己 设计的 Z-Stack 协议栈中提供了一个名为作系统抽象层 OSAL 的协议栈调度程 序。对于用户来说，除了能够看到这个调度程序外其它任何协议栈操作的具体 实现细节都被封装在库代码中。用户在进行具体的应用开发时只能够通过调用 API 接口来进行，而无权知道 ZigBee 协议栈实现的具体细节，也没必要去知道。 因此在这里提醒各位开发者，在使用 ZigBee 协议栈进行实际项目开发时，不需要关心协议栈是具体怎么实现的，当然有兴趣的也可以深入分析。协议栈可以当成一个小型的操作系统。采用任务轮询的方法运行。</p>
 <h2 id="协议栈初始化了解">协议栈初始化了解</h2>
 <p>协议栈没什么神秘的，我们打开协议栈文件夹Texas Instruments\Projects\zstack。里面包含了TI公司的例程和工具。其中的功能我们会在用到的实验里讲解。再打开Samples文件夹，进入SampleApp文件夹。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image10.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
-<ol start="8">
+<figure data-type="image" tabindex="7"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image10.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>Samples文件夹里面有三个例子: GenericApp、SampleApp、SimpleApp在这里们选择SampleApp 对协议栈的工作流程进行讲解。打开 \SampleApp\CC2530DB 下工程文件SampleApp.eww。留意左边的工程目录，我们暂时只需要关注 Zmain文件夹和 App文件夹。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image11.png" alt="" loading="lazy">{width=&quot;1.575in&quot; height=&quot;3.7847222222222223in&quot;}</p>
-<ol start="9">
+<figure data-type="image" tabindex="8"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image11.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>任何程序都在 main 函数开始运行，Z-STACK自然也不例外。打开 Zmain.C,找到int main( void ) 函数。我们大概浏览一下 main 函数代码：</p>
@@ -280,8 +280,8 @@
 <p>}</p>
 <p>}</p>
 <p>我们来关注一下 events = tasksEvents[idx]; 进入 tasksEvents[idx]数组定义, 发现恰好在刚刚 osalInitTasks( void )函数上面。而且 taskID 一一对应。这就是初始化与调用的关系。taskID 把任务联系起来了。这就是协议栈的注意工作流程，如图2.2.3。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image12.png" alt="" loading="lazy">{width=&quot;1.575in&quot; height=&quot;3.1625in&quot;}</p>
-<ol start="10">
+<figure data-type="image" tabindex="9"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image12.png" alt="" loading="lazy"></figure>
+<ol>
 <li>协议栈工作流程</li>
 </ol>
 <h2 id="协议栈的应用">协议栈的应用</h2>
@@ -298,8 +298,8 @@
 <p>小米的智能家居，用的就是zigbee进行数据传输。举个最简单的例子，在有功率放大器的情况下，终端节点和协调器的最大通讯距离为 200 米，我们在 200 米的地方加入 1 个节点设备作为路由器，那么终端就可以通过路由器转发，也就是说通讯距离可达 400 米。而且新节点加入现有网络极为方便。那么我们想一下，如果中间加入多个路由器的话，可以传输多远呢？</p>
 <h2 id="zigbee协议栈的应用层代码">Zigbee协议栈的应用层代码</h2>
 <p>了解过计算机网络的人都应该知道，计算机网络是按照OSI模型来进行传输的，zigbee协议栈同样也是按照这个模型进行传输数据的。IEEE 802.15.4 定义了 PHY（物理层）和 MAC（介质访问层）技术规范；ZigBee 联盟定义了 NWK（网络层）、APS（应用程序支持子层）、APL（应用层）技术规范。 ZigBee 协议栈就是将各个层定义的协议都集合在一起，以函数的形式实现，并给用户提供 API(应用层)，用户可以直接调用。如图2.4.1。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image13.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1479166666666667in&quot;}</p>
-<ol start="11">
+<figure data-type="image" tabindex="10"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image13.png" alt="" loading="lazy"></figure>
+<ol>
 <li>ZigBee 无线网络协议层</li>
 </ol>
 <p>在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。</p>
@@ -385,13 +385,13 @@
 <p>3、串口发送</p>
 <p>第一步：串口初始化</p>
 <p>串口初始化大家很熟悉，就是配置串口号、波特率、流控、校验位等等。以前我们都是配置好寄存器然后使用。现在我们在 workspace 下找到HAL\Target\CC2530EB\drivers的 hal_uart.c 文件（图2.4.2），我们可以看到里面已经包括了串口初始化、发送、接收等函数，是不是觉得很方便？</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image14.png" alt="" loading="lazy">{width=&quot;2.3625in&quot; height=&quot;2.9166666666666665in&quot;}</p>
-<ol start="12">
+<figure data-type="image" tabindex="11"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image14.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>浏览一下关于串口的操作函数还是挺全的，但是方便的东西还在后面！！！我们看看 workspace 上的 MT 层，发觉有很多基本函数，前面带MT。包括 MT_UART.C，我们打开这个文件。看到 MT_UartInit()函数，这里也有一个串口初 始化函数的，没错 Z-stack 上有一个 MT 层，用户可以选用 MT 层配置和调用其 他驱动。进一步简化了操作流程。 好了，我们已经知道串口配置的方法，那么应该在那里初始化呢？既然我 们用的是 SampleApp 例程，当然是在 SampleApp 的文件下面啦。我们打开APP目录下的 OSAL_SampleApp.C 文件，找到上节提到的 osalInitTasks（）任务初始化函数中的 SampleApp_Init（）函数，进入这个函数，发现原来在 SampleApp.c 文件中。我们在这里加入串口初始化代码。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image15.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.0861111111111112in&quot;}</p>
-<ol start="13">
+<figure data-type="image" tabindex="12"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image15.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>我们在SampleApp_TransID = 0;下面加入以下代码。</p>
@@ -421,8 +421,8 @@
 <p>}</p>
 <p>}</p>
 <p>分别选择 CoordinatorEB-和 RouterEB 编译后对应下载到协调器和终端模块，协调器通过串口连接到电脑。我们看到串口收 到了数据，如图2.4.4（图片上的数据为笔者测试多台路由器组网后的数据，之后会介绍）。刚刚的数据将会显示SampleApp_ProcessEvent处理函数中if ( events &amp; SAMPLEAPP_SEND_PERIODIC_MSG_EVT )下面SampleApp_SendPeriodicMessage函数发送的内容。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image16.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
-<ol start="14">
+<figure data-type="image" tabindex="13"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image16.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>现在我们对发送和接收做一个总结，程序运行过程中，SampleApp_SendPeriodicMessage函数将数据发送给其它设备，其它设备通过SampleApp_MessageMSGCB函数的SAMPLEAPP_PERIODIC_CLUSTERID事件来进行处理接收到的数据。组网的教程就到这里，接下来我们来使用多个zigbee开发板进行综合实验。读者也可以自己控制自己想要控制的东西，甚至控制家里的电灯，电风扇。</p>
@@ -432,8 +432,8 @@
 <p>大部分实验的教程都是先一步一步来介绍操作，最后才告诉读者实验现象是什么，实验过程枯燥无味，而我们的这次实验则反其道而行之，先告诉读者我们的实验将会达到什么样的效果。引起读者的兴趣，然后让读者有目的的主动跟随着笔者去高效的做这个实验。</p>
 <p>首先，我们的实验使用的IAR版本为8.2。使用到的协议栈版本为ZStack-CC2530-2.5.1a。要在电脑上准备好CH340的驱动以及CCDebug的驱动。这些我们在前面都有讲过，在这里就不多说了。</p>
 <p>本次实验我们用到了七块CC2530的开发板，七块板建立七个工程文件如图3.1.1。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image17.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
-<ol start="15">
+<figure data-type="image" tabindex="14"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image17.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>第一个工程是协调器的工程，将烧录到协调器。协调器就好比因特网中的根服务器，所有的设备都要连接到这个设备。</p>
@@ -447,20 +447,20 @@
 <p>功能的介绍就到这里，下面我们看一下每一块开发板所产生的现象。</p>
 <h3 id="协调器实验现象">协调器实验现象</h3>
 <p>首先我们来看一下协调器，如图3.1.2所示。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image18.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
-<ol start="16">
+<figure data-type="image" tabindex="15"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image18.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <p>协调器会收到一堆数据，那是因为每一个路由器都会定时向协调器发送数据。我们可以看到总共有六个设备向协调器发送数据。</p>
 <p>当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。而在实际的电路连接上，笔者将风扇连接到了一块继电器上，开发板通过控制继电器的当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。开关来控制风扇。如图图3.1.3。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image19.jpeg" alt="IMG_20191125_142313" loading="lazy">{width=&quot;2.3625in&quot; height=&quot;2.3777777777777778in&quot;}</p>
-<ol start="17">
+<p>![IMG_20191125_142313](file://C:/Users/zihao/Documents/Gridea/zigbee2.5图片/</p>
+<ol>
 <li>风扇转动</li>
 </ol>
 <p>当我们使用串口发送00 fe 00 00 02 给协调器的时候，控制震动器的那一块开发板便会收到命令，震动器将会启动。</p>
 <p>当我们使用串口发送00 fe 00 00 03 给协调器的时候，控制火焰传感器的那一块开发板便会收到命令，发送当前是否有火焰给协调器。</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image20.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
-<ol start="18">
+<figure data-type="image" tabindex="16"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image20.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <h3 id="路由器1实验现象">路由器1实验现象</h3>
@@ -473,8 +473,8 @@
 <p>路由器4每隔3秒钟便会发送I am motor给协调器，协调器通过串口将其打印到屏幕上。当路由器1收到motor的时候。震动器状态会发生变化。根据其它开发板程序代码，即当串口发送00 fe 00 00 02给协调器的时候震动器的状态发生变化。</p>
 <h3 id="路由器5实验现象">路由器5实验现象</h3>
 <p>路由器5每隔3秒钟便会发送I am flame sensor给协调器，协调器通过串口将其打印到屏幕上。即当串口发送00 fe 00 00 03给协调器的时候，协调器会发送flame给路由器5，路由器5接收到数据后会返回当前的火焰传感器状态给协调器。协调器会通过串口打印到屏幕上。如图3.1.5：</p>
-<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image21.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
-<ol start="19">
+<figure data-type="image" tabindex="17"><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image21.png" alt="" loading="lazy"></figure>
+<ol>
 <li></li>
 </ol>
 <h3 id="路由器6实验现象">路由器6实验现象</h3>
@@ -990,7 +990,7 @@
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://kingingwang.github.io//images/avatar.png?v=1586614774925" class="no-responsive avatar">
+    <img src="https://kingingwang.github.io//images/avatar.png?v=1586615197576" class="no-responsive avatar">
     <div class="text-muted">时时勤拂拭，勿使染尘埃</div>
     <div class="social-container">
       
@@ -1070,7 +1070,7 @@
     </div>
     <div class="row">
       
-        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge success">
+        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge secondary">
           zigbee
         </a>
       
