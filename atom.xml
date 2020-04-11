@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kingingwang.github.io/</id>
     <title>KingingWang</title>
-    <updated>2020-04-11T00:56:54.257Z</updated>
+    <updated>2020-04-11T01:03:06.727Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kingingwang.github.io/"/>
     <link rel="self" href="https://kingingwang.github.io/atom.xml"/>
@@ -10,6 +10,42 @@
     <logo>https://kingingwang.github.io/images/avatar.png</logo>
     <icon>https://kingingwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, KingingWang</rights>
+    <entry>
+        <title type="html"><![CDATA[ESP8266学习记录]]></title>
+        <id>https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:02:43.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F429学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:02:19.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F407学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:01:31.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F103学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:00:58.000Z</updated>
+        <content type="html"><![CDATA[<p>有时间做</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Z-Stack3.0学习记录]]></title>
         <id>https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/</id>
