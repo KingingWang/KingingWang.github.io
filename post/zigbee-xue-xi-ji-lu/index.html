@@ -7,7 +7,7 @@
 <meta name="description" content="时时勤拂拭，勿使染尘埃">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586605720710">
+<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586614488972">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -91,7 +91,7 @@
             <p class="article-meta">
               2020-04-10
               
-                <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge success">
+                <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge secondary">
                   zigbee
                 </a>
               
@@ -100,736 +100,916 @@
               <img src="https://kingingwang.github.io//post-images/zigbee-xue-xi-ji-lu.jpg" alt="Z-Stack2.5学习记录">
             
             <div class="post-content">
-              <h1 id="1-zigbee介绍">1 Zigbee介绍</h1>
-<h2 id="11-zigbee-简介">1.1 ZigBee 简介</h2>
-<p>Zigbee 是基于 IEEE802.15.4 标准的低功耗个域网协议。根据这个协议规定的技术是一种短距离、低功耗的无线通信技术。这一名称来源于蜜蜂的八字舞，由于蜜蜂(bee)是靠飞翔和“嗡嗡”(zig)地抖动翅膀的“舞蹈”来与同伴传递花粉所在方位信息，也就是说蜜蜂依靠这样的方式构成了群体中的通信网络。其特点是近距离、低复杂度、自组织、低功耗、低数据速率、低成本。主要适合用于自动控制和远程控制领域，可以嵌入各种设备。简而言之，ZigBee 就是一种便宜的，低功耗的近距离无线组网通讯技术。国内通常会翻译成“紫蜂”。<br>
-相信大部分人开始时会以为 Zigbee 是一类无线模块，我一开始也是这么的认为，所以当我首次看到 Zigbee 产品时，第一时间找它上面的 MCU，还真想知道用什么单片机来控制这东西，找了半天没发现，一头雾水。最后才发现，原来们 CC2530 芯片上集成了 8051 内核，里面集成了一片增强型的 51 单片机。</p>
-<h2 id="12-zigbee开发板">1.2 Zigbee开发板</h2>
-<p>此开发板体积小，重量轻，引出部分 IO 口，标准 2.54 排针接口。可直 接应用在万用板或自制 PCB 上。模块使用PCB天线，可靠传输距离达10米。如图1.2.1所示：<br>
-图1.2.1 CC2530 开发板</p>
-<h2 id="13-开发环境建立">1.3 开发环境建立</h2>
-<h3 id="131-iar安装">1.3.1 IAR安装</h3>
-<p>记得以前我们学习 51 单片机的时候用得最多的是 KEIL 了，类似，这里我们使用 IAR 8.20，IAR开发最大优势就是能够直接使用TI公司提供的协议栈Z-Stack进行开发，我们只需要调用API接口函数，即可简单方便的控制zigbee。<br>
-这里我们选用ZStack-CC2530-2.5.1a协议栈，大家可能会有疑问了，TI官方的协议栈不是已经更新到Z-STACK 3.0.2了吗？为什么我们还要使用老版本呢？那是因为最新版本的协议栈占用内存资源相当的多，而我们的CC2530芯片只有8k的SRAM。一旦使用了最新版本的协议栈，那么留给开发者使用的内存资源将相当的有限（别问我为什么不使用更高级的芯片）。特别不适合初学者使用。所以我们将使用ZStack-CC2530-2.5.1a协议栈。<br>
-我们使用IAR8.2版本，具体安装方法见《IAR安装步骤》。安装完成后界面如下图1.3.1。</p>
-<p>图1.3.1 IAR 8.20 软件界面：</p>
-<h3 id="132-协议栈安装">1.3.2 协议栈安装</h3>
-<p>TI协议栈 Zstack-CC2530-2.5.1a 安装方法：Z-stack 的安装比较简单，同样安装在默认路径。协议栈安装完成后在图这个路径（C 盘为系统盘），里面包含了例程和工具。</p>
-<h3 id="133-ccdebug驱动安装">1.3.3 CCdebug驱动安装</h3>
-<p>驱动路径在ZStack-CC2530-2.5.1a\Components\hal\target\CC2530USB\usb\driver，如图1.3.2。</p>
-<p>图1.3.2<br>
-安装完成后，重新拔插仿真器，在设备管理器里找到 Chipcon SRF04EB，说明驱动安装完成，如图1.3.3所示。</p>
-<p>图1.3.3 驱动安装完成</p>
-<h3 id="134-连接开发板">1.3.4 连接开发板</h3>
-<p>连接 CC2530 开发板，按下 DEBUGGER 复位键，芯片指示灯亮（表示检测到开发板上 CC2530芯片），则完成连接工作（注意右侧开关要打开）。如图1.3.4所示。</p>
-<p>图1.3.4 芯片指示灯亮</p>
-<h3 id="135-usb-转串口驱动的安装">1.3.5 USB 转串口驱动的安装</h3>
-<p>ZigBee 所有开发板上集成CH340的USB转串口芯片，我们通过安装相应的驱动可通过USB直接开发调试。打开CH340驱动软件直接进行安装。（装时候建议 USB 线不连接 zigbee 开发板！）</p>
-<p>图1.3.5 成功安装驱动</p>
-<h1 id="2-组网">2 组网</h1>
-<h2 id="21-zigbee-协议栈简介">2.1 Zigbee 协议栈简介</h2>
-<p>本节内容仅仅是对 ZigBee 协议栈的一些大家必须理解清楚的概念进行简单 的讲解，并有对 ZigBee 协议栈的构成及工作原理进行详细的讨论。让刚接触 ZigBee 协议栈的朋友们对它有个初步的感性认识，有助于后面使用 ZigBee 协议 栈进行真正的项目开发。 什么是ZigBee 协议栈呢？它和 ZigBee 协议有什么关系呢 协议是一系列的通信标准，通信双方需要共同按照这一标准进行正常的数据 发射和接收。协议栈是协议的具体实现形式，通俗点来理解就是协议栈是协议和 用户之间的一个接口，开发人员通过使用协议栈来使用这个议的，进而实现无线数据收发。 图图2.1.1展示了 ZigBee 无线网络协议层的架构图。ZigBee 协议分为两部分，IEEE 802.15.4 定义了 PHY（物理层）和 MAC（介质访问层）技术规范；ZigBee 联盟定义了NWK（网络层）、APS（应用程序支持子层）、APL（应用层）技术规范。ZigBee 协议栈就是将各个层定义的协议都集合在一起，以函数的形式实现，并给用户提供 API(应用层)，用户可以直接调用。</p>
-<p>图2.1.1 ZigBee 无线网络协议层<br>
-在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。介绍到这里，大家应该清楚协议和协议栈的关系了吧，是不是会想着怎么样才能用协议栈来开发自己的项目呢？技术总是不断地在发展地，我们可以用 ZigBee 厂商提供的协议栈软件来方便地使用 ZigBee 协议栈。Z-stack 是挪威半导体公司 Chipcon(目前已经被 TI 公司收购)推出其 CC2430开发平台时，推出的一款业界领先的商业级协议栈软件，由于这个协议栈软件的出现，用户可以很容易地开发出具体的应用程序来，也就是大家说的掌握 10 个函数就能使用ZigBee 通讯的原因。它使用瑞典公司 IAR 开发的 IAR Embedded Workbench for MCS-51 作为它的集成开发环境。Chipcon 公司为自己 设计的 Z-Stack 协议栈中提供了一个名为作系统抽象层 OSAL 的协议栈调度程 序。对于用户来说，除了能够看到这个调度程序外其它任何协议栈操作的具体 实现细节都被封装在库代码中。用户在进行具体的应用开发时只能够通过调用 API 接口来进行，而无权知道 ZigBee 协议栈实现的具体细节，也没必要去知道。 因此在这里提醒各位开发者，在使用 ZigBee 协议栈进行实际项目开发时，不需要关心协议栈是具体怎么实现的，当然有兴趣的也可以深入分析。协议栈可以当成一个小型的操作系统。采用任务轮询的方法运行。</p>
-<h2 id="22-协议栈初始化了解">2.2 协议栈初始化了解</h2>
-<p>协议栈没什么神秘的，我们打开协议栈文件夹Texas Instruments\Projects\zstack。里面包含了TI公司的例程和工具。其中的功能我们会在用到的实验里讲解。再打开Samples文件夹，进入SampleApp文件夹。</p>
-<p>图2.2.1<br>
-Samples文件夹里面有三个例子: GenericApp、SampleApp、SimpleApp在这里们选择SampleApp 对协议栈的工作流程进行讲解。打开 \SampleApp\CC2530DB 下工程文件SampleApp.eww。留意左边的工程目录，我们暂时只需要关注 Zmain文件夹和 App文件夹。</p>
-<p>图2.2.2<br>
-任何程序都在 main 函数开始运行，Z-STACK自然也不例外。打开 Zmain.C,找到int main( void ) 函数。我们大概浏览一下 main 函数代码：<br>
-/****************************************************************</p>
-<ul>
-<li>@fn main</li>
-<li>@brief First function called after startup.</li>
-<li>@return don’t care<br>
-<em>/<br>
-int main( void )<br>
-{<br>
-// Turn off interrupts<br>
-osal_int_disable( INTS_ALL ); //关闭所有中断<br>
-// Initialization for board related stuff such as LEDs<br>
-HAL_BOARD_INIT(); //初始化系统时钟<br>
-// Make sure supply voltage is high enough to run<br>
-zmain_vdd_check(); //检查芯片电压是否正常<br>
-// Initialize board I/O<br>
-InitBoard( OB_COLD ); //初始化 I/O ，LED 、Timer 等<br>
-// Initialze HAL drivers<br>
-HalDriverInit(); //初始化芯片各硬件模块<br>
-// Initialize NV System<br>
-osal_nv_init( NULL ); // 初始化 Flash 存储器<br>
-// Initialize the MAC<br>
-ZmacInit(); //初始化 MAC 层<br>
-// Determine the extended address<br>
-zmain_ext_addr(); //确定 IEEE 64 位地址<br>
-// Initialize basic NV items<br>
-zgInit(); // 初始化非易失变量<br>
-#ifndef NONWK<br>
-// Since the AF isn’t a task, call it’s initialization routine<br>
-afInit();<br>
-#endif<br>
-// Initialize the operating system<br>
-osal_init_system(); // 初始化操作系统<br>
-// Allow interrupts<br>
-osal_int_enable( INTS_ALL ); // 使能全部中断<br>
-// Final board initialization<br>
-InitBoard( OB_READY ); // 初始化按键<br>
-// Display information about this device<br>
-zmain_dev_info(); //显示设备信息<br>
-/</em> Display the device info on the LCD <em>/<br>
-#ifdef LCD_SUPPORTED<br>
-zmain_lcd_init();<br>
-#endif<br>
-#ifdef WDT_IN_PM1<br>
-/</em> If WDT is used, this is a good place to enable it. */<br>
-WatchDogEnable( WDTIMX );<br>
-#endif<br>
-osal_start_system(); // No Return from here 执行操作系统，进去后不会返回<br>
-return 0; // Shouldn’t get here.<br>
-}<br>
-我们大概看了上面的代码后，可能感觉很多函数不认识。没关系，代码很有条理性，开始执行初始化工作。包括硬件、网络层、任务等的初始化。然后执行osal_start_system();操作系统。进去后可不会回来了。在这里，我们重点了解 2 个函数：osal_init_system(); 和osal_start_system();即初始化操作系统和开始运行操作系统。<br>
-在函数名上单击右键——go to definition of…，或者鼠标点击函数名，按下F12按键，便可以进入函数。<br>
-我们先来看osal_init_system();系统初始化函数，进入函数。发现里面有6个初始化函数，没事，这里我们只关心osalInitTasks();任务初始化函数。继续进入该函数。</li>
-</ul>
-<p>void osalInitTasks( void )<br>
-{<br>
-uint8 taskID = 0;<br>
-// 分配内存，返回指向缓冲区的指针<br>
-tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);<br>
-// 设置所分配的内存空间单元值为 0<br>
-osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));<br>
-// 任务优先级由高向低依次排列，高优先级对应 taskID 的值反而小<br>
-macTaskInit(taskID ++ ); //macTaskInit(0) ，用户不需考虑<br>
-nwk_init(taskID ++ ); //nwk_init(1)，用户不需考虑<br>
-Hal_Init(taskID ++ ); //Hal_Init(2) ，用户需考虑<br>
-#if defined( MT_TASK ) 152<br>
-MT_TaskInit(taskID ++ );<br>
-#endif<br>
-APS_Init(taskID ++ ); //APS_Init(3) ，用户不需考虑<br>
-#if defined ( ZIGBEE_FRAGMENTATION )<br>
-APSF_Init(taskID ++ );<br>
-#endif<br>
-ZDApp_Init(taskID ++ ); //ZDApp_Init(4) ，用户需考虑<br>
-#if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )<br>
-ZDNwkMgr_Init(taskID ++ );<br>
-#endif<br>
-SampleApp_Init(taskID ); // SampleApp_Init _Init(5) ，用户需考虑<br>
-}<br>
-我们可以这样理解，函数对 taskID个东西进行初始化，每初始化一个，taskID++。大家到了注释后面有些写着用户需要考虑，有些则写着用户不需考虑。没错，需要考虑的用户可以根据自己的硬件平台或者其他设置，而写着不需考虑的也是不能修改的。TI 公司出品协议栈已完成的东西。SampleApp_Init(taskID );很重要，也是我们应用协议栈例程的必需要函数，用户通常在这里初始化自己的东西。至此，osal_init_system()大概了解完毕。<br>
-我们再来看第二个函数 osal_start_system();运行操作系统。同样用 go to definition 的方法进入该函数。结果发现很不理想。甚至很多函数形式没见过。其实这个是任务系统轮询的主要函数。他会查找发生的事件然后调用相应的 事件执行函数。如果没有事件登记要发生，么就进入睡眠模式。这个函数是永远不会返回的。<br>
-我们来看一下这个函数的代码：<br>
-void osal_start_system( void )<br>
-{<br>
-#if !defined ( ZBIT ) &amp;&amp; !defined ( UBIT )<br>
-for(;😉 // Forever Loop<br>
-#endif<br>
-{<br>
-uint8 idx = 0;<br>
-osalTimeUpdate();//这里是在扫描哪个事件被触发了，然后置相应的标志位<br>
-Hal_ProcessPoll(); // This replaces MT_SerialPoll() and osal_check_timer().<br>
-Do {<br>
-if (tasksEvents[idx]) // Task is highest priority that is ready.<br>
-{<br>
-break; // 得到待处理的最高优先级任务索引号 idx<br>
-}<br>
-} while (++idx &lt; tasksCnt);<br>
-if (idx &lt; tasksCnt)<br>
-{<br>
-uint16 events;<br>
-halIntState_t intState;<br>
-HAL_ENTER_CRITICAL_SECTION(intState); // 进入临界区,保护<br>
-events = tasksEvents[idx]; //提取需要处理的任务中的事件<br>
-tasksEvents[idx] = 0; // Clear the Events for this task.清除本次任务的事件<br>
-HAL_EXIT_CRITICAL_SECTION(intState); // 退出临界区<br>
-events = (tasksArr[idx])( idx, events );//通过指针调用任务处理函数，关键<br>
-HAL_ENTER_CRITICAL_SECTION(intState);//进入临界区<br>
-tasksEvents[idx] |= events; // Add back unprocessed events to the current<br>
-//task.保存未处理的事件<br>
-HAL_EXIT_CRITICAL_SECTION(intState); // 退出临界区<br>
-}<br>
-#if defined( POWER_SAVING )<br>
-else // Complete pass through all task events with no activity?<br>
-{<br>
-osal_pwrmgr_powerconserve(); // Put the processor/system into sleep<br>
-}<br>
-#endif<br>
-}<br>
-}<br>
-我们来关注一下 events = tasksEvents[idx]; 进入 tasksEvents[idx]数组定义, 发现恰好在刚刚 osalInitTasks( void )函数上面。而且 taskID 一一对应。这就是初始化与调用的关系。taskID 把任务联系起来了。这就是协议栈的注意工作流程，如图2.2.3。</p>
-<p>图2.2.3 协议栈工作流程</p>
-<h2 id="23-协议栈的应用">2.3 协议栈的应用</h2>
-<p>其实我们最关心的，莫过于协议栈的应用了，一切学习都是以应用为主的。协议栈到底可以用来做什么呢？这是大家比较关心的问题了。先来告诉大家一下zigbee协议栈的应用吧。<br>
-目前 ZigBee 的应用领域主要有:</p>
+              <p>广州粤嵌通信科技股份有限公司</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image2.jpeg" alt="logo_new" loading="lazy">{width=&quot;1.39375in&quot; height=&quot;1.4090277777777778in&quot;}</p>
+<p><strong>Zigbee协议栈实验</strong></p>
+<hr>
+<p><strong>作者</strong>   <strong>GEC</strong><br>
+<strong>日期</strong>   <strong>2019-11-20</strong><br>
+<strong>版本</strong>   <strong>Rev1.0</strong></p>
+<hr>
+<p>目录</p>
+<p>1 Zigbee介绍 - 1 -</p>
+<p><a href="%5Cl">1.1 ZigBee 简介 - 1 -</a></p>
+<p><a href="%5Cl">1.2 Zigbee开发板 - 1 -</a></p>
+<p><a href="%5Cl">1.3 开发环境建立 - 2 -</a></p>
+<p><a href="%5Cl">1.3.1 IAR安装 - 2 -</a></p>
+<p><a href="%5Cl">1.3.2 协议栈安装 - 3 -</a></p>
+<p><a href="%5Cl">1.3.3 CCdebug驱动安装 - 3 -</a></p>
+<p><a href="%5Cl">1.3.4 连接开发板 - 3 -</a></p>
+<p><a href="%5Cl">1.3.5 USB 转串口驱动的安装 - 4 -</a></p>
+<p><a href="%5Cl">2 组网 - 5 -</a></p>
+<p><a href="%5Cl">2.1 Zigbee 协议栈简介 - 5 -</a></p>
+<p><a href="%5Cl">2.2 协议栈初始化了解 - 6 -</a></p>
+<p><a href="%5Cl">2.3 协议栈的应用 - 11 -</a></p>
+<p><a href="%5Cl">2.4 Zigbee协议栈的应用层代码 - 12 -</a></p>
+<p><a href="%5Cl">3 综合实验教程 - 18 -</a></p>
+<p><a href="%5Cl">3.1 实验现象 - 18 -</a></p>
+<p><a href="%5Cl">3.1.1 实验现象综述 - 18 -</a></p>
+<p><a href="%5Cl">3.1.2 协调器实验现象 - 19 -</a></p>
+<p><a href="%5Cl">3.1.3 路由器1实验现象 - 20 -</a></p>
+<p><a href="%5Cl">3.1.4 路由器2实验现象 - 20 -</a></p>
+<p><a href="%5Cl">3.1.5 路由器3实验现象 - 21 -</a></p>
+<p><a href="%5Cl">3.1.6 路由器4实验现象 - 21 -</a></p>
+<p><a href="%5Cl">3.1.7 路由器5实验现象 - 21 -</a></p>
+<p><a href="%5Cl">3.1.8 路由器6实验现象 - 21 -</a></p>
+<p><a href="%5Cl">3.2 实验代码讲解 - 23 -</a></p>
+<p><a href="%5Cl">3.2.1 协调器代码修改步骤讲解 - 23 -</a></p>
+<p><a href="%5Cl">3.2.2 路由器控制风扇代码修改步骤详解 - 31 -</a></p>
+<p><a href="%5Cl">3.2.3 路由器点对点通信代码修改步骤详解 - 35 -</a></p>
+<p><a href="%5Cl">3.2.4 路由器广播通信代码修改步骤详解 - 41 -</a></p>
+<p><a href="%5Cl">3.2.5 路由器控制震动器代码修改步骤详解 - 41 -</a></p>
+<p><a href="%5Cl">3.2.6 路由器控制火焰传感器代码修改步骤详解 - 43 -</a></p>
+<h1 id="zigbee介绍">Zigbee介绍</h1>
+<h2 id="zigbee-简介">ZigBee 简介</h2>
+<p>Zigbee 是基于 IEEE802.15.4 标准的低功耗个域网协议。根据这个协议规定的技术是一种短距离、低功耗的无线通信技术。这一名称来源于蜜蜂的八字舞，由于蜜蜂(bee)是靠飞翔和&quot;嗡嗡&quot;(zig)地抖动翅膀的&quot;舞蹈&quot;来与同伴传递花粉所在方位信息，也就是说蜜蜂依靠这样的方式构成了群体中的通信网络。其特点是近距离、低复杂度、自组织、低功耗、低数据速率、低成本。主要适合用于自动控制和远程控制领域，可以嵌入各种设备。简而言之，ZigBee 就是一种便宜的，低功耗的近距离无线组网通讯技术。国内通常会翻译成&quot;紫蜂&quot;。</p>
+<p>相信大部分人开始时会以为 Zigbee 是一类无线模块，我一开始也是这么的认为，所以当我首次看到 Zigbee 产品时，第一时间找它上面的 MCU，还真想知道用什么单片机来控制这东西，找了半天没发现，一头雾水。最后才发现，原来们 CC2530 芯片上集成了 8051 内核，里面集成了一片增强型的 51 单片机。</p>
+<h2 id="zigbee开发板">Zigbee开发板</h2>
+<p>此开发板体积小，重量轻，引出部分 IO 口，标准 2.54 排针接口。可直 接应用在万用板或自制 PCB 上。模块使用PCB天线，可靠传输距离达10米。如图1.2.1所示：</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image3.jpeg" alt="IMG_20191120_151436" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.217361111111111in&quot;}</p>
 <ol>
-<li>智能家居物联网 （物联网似乎已经成了趋势，我们拭目以待）</li>
-<li>工业、农业无线监测系统</li>
-<li>个人监控、医院病人定位</li>
-<li>消费电子</li>
-<li>城市智能交通</li>
-<li>户外作业及地下矿场安全监护<br>
-…<br>
-…<br>
-小米的智能家居，用的就是zigbee进行数据传输。举个最简单的例子，在有功率放大器的情况下，终端节点和协调器的最大通讯距离为 200 米，我们在 200 米的地方加入 1 个节点设备作为路由器，那么终端就可以通过路由器转发，也就是说通讯距离可达 400 米。而且新节点加入现有网络极为方便。那么我们想一下，如果中间加入多个路由器的话，可以传输多远呢？</li>
+<li>CC2530 开发板</li>
 </ol>
-<h2 id="24-zigbee协议栈的应用层代码">2.4 Zigbee协议栈的应用层代码</h2>
+<h2 id="开发环境建立">开发环境建立</h2>
+<h3 id="iar安装">IAR安装</h3>
+<p>记得以前我们学习 51 单片机的时候用得最多的是 KEIL 了，类似，这里我们使用 IAR 8.20，IAR开发最大优势就是能够直接使用TI公司提供的协议栈Z-Stack进行开发，我们只需要调用API接口函数，即可简单方便的控制zigbee。</p>
+<p>这里我们选用ZStack-CC2530-2.5.1a协议栈，大家可能会有疑问了，TI官方的协议栈不是已经更新到Z-STACK 3.0.2了吗？为什么我们还要使用老版本呢？那是因为最新版本的协议栈占用内存资源相当的多，而我们的CC2530芯片只有8k的SRAM。一旦使用了最新版本的协议栈，那么留给开发者使用的内存资源将相当的有限（别问我为什么不使用更高级的芯片）。特别不适合初学者使用。所以我们将使用ZStack-CC2530-2.5.1a协议栈。</p>
+<p>我们使用IAR8.2版本，具体安装方法见《IAR安装步骤》。安装完成后界面如下图1.3.1。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image4.png" alt="" loading="lazy">{width=&quot;5.754861111111111in&quot; height=&quot;3.1055555555555556in&quot;}</p>
+<ol start="2">
+<li>IAR 8.20 软件界面：</li>
+</ol>
+<h3 id="协议栈安装">协议栈安装</h3>
+<p>TI协议栈 Zstack-CC2530-2.5.1a 安装方法：Z-stack 的安装比较简单，同样安装在默认路径。协议栈安装完成后在图这个路径（C 盘为系统盘），里面包含了例程和工具。</p>
+<h3 id="ccdebug驱动安装">CCdebug驱动安装</h3>
+<p>驱动路径在ZStack-CC2530-2.5.1a\Components\hal\target\CC2530USB\usb\driver，如图1.3.2。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image5.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>安装完成后，重新拔插仿真器，在设备管理器里找到 Chipcon SRF04EB，说明驱动安装完成，如图1.3.3所示。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image6.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;2.29375in&quot;}</p>
+<ol start="4">
+<li>驱动安装完成</li>
+</ol>
+<h3 id="连接开发板">连接开发板</h3>
+<p>连接 CC2530 开发板，按下 DEBUGGER 复位键，芯片指示灯亮（表示检测到开发板上 CC2530芯片），则完成连接工作（注意右侧开关要打开）。如图1.3.4所示。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image7.jpeg" alt="IMG_20191120_155713" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.176388888888889in&quot;}</p>
+<ol start="5">
+<li>芯片指示灯亮</li>
+</ol>
+<h3 id="usb-转串口驱动的安装">USB 转串口驱动的安装</h3>
+<p>ZigBee 所有开发板上集成CH340的USB转串口芯片，我们通过安装相应的驱动可通过USB直接开发调试。打开CH340驱动软件直接进行安装。（装时候建议 USB 线不连接 zigbee 开发板！）</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image8.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;2.2930555555555556in&quot;}</p>
+<ol start="6">
+<li>成功安装驱动</li>
+</ol>
+<h1 id="组网">组网</h1>
+<h2 id="zigbee-协议栈简介">Zigbee 协议栈简介</h2>
+<p>本节内容仅仅是对 ZigBee 协议栈的一些大家必须理解清楚的概念进行简单 的讲解，并有对 ZigBee 协议栈的构成及工作原理进行详细的讨论。让刚接触 ZigBee 协议栈的朋友们对它有个初步的感性认识，有助于后面使用 ZigBee 协议 栈进行真正的项目开发。 什么是ZigBee 协议栈呢？它和 ZigBee 协议有什么关系呢 协议是一系列的通信标准，通信双方需要共同按照这一标准进行正常的数据 发射和接收。协议栈是协议的具体实现形式，通俗点来理解就是协议栈是协议和 用户之间的一个接口，开发人员通过使用协议栈来使用这个议的，进而实现无线数据收发。 图图2.1.1展示了 ZigBee 无线网络协议层的架构图。ZigBee 协议分为两部分，IEEE 802.15.4 定义了 PHY（物理层）和 MAC（介质访问层）技术规范；ZigBee 联盟定义了NWK（网络层）、APS（应用程序支持子层）、APL（应用层）技术规范。ZigBee 协议栈就是将各个层定义的协议都集合在一起，以函数的形式实现，并给用户提供 API(应用层)，用户可以直接调用。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image9.png" alt="" loading="lazy">{width=&quot;4.7243055555555555in&quot; height=&quot;2.8444444444444446in&quot;}</p>
+<ol start="7">
+<li>ZigBee 无线网络协议层</li>
+</ol>
+<p>在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。介绍到这里，大家应该清楚协议和协议栈的关系了吧，是不是会想着怎么样才能用协议栈来开发自己的项目呢？技术总是不断地在发展地，我们可以用 ZigBee 厂商提供的协议栈软件来方便地使用 ZigBee 协议栈。Z-stack 是挪威半导体公司 Chipcon(目前已经被 TI 公司收购)推出其 CC2430开发平台时，推出的一款业界领先的商业级协议栈软件，由于这个协议栈软件的出现，用户可以很容易地开发出具体的应用程序来，也就是大家说的掌握 10 个函数就能使用ZigBee 通讯的原因。它使用瑞典公司 IAR 开发的 IAR Embedded Workbench for MCS-51 作为它的集成开发环境。Chipcon 公司为自己 设计的 Z-Stack 协议栈中提供了一个名为作系统抽象层 OSAL 的协议栈调度程 序。对于用户来说，除了能够看到这个调度程序外其它任何协议栈操作的具体 实现细节都被封装在库代码中。用户在进行具体的应用开发时只能够通过调用 API 接口来进行，而无权知道 ZigBee 协议栈实现的具体细节，也没必要去知道。 因此在这里提醒各位开发者，在使用 ZigBee 协议栈进行实际项目开发时，不需要关心协议栈是具体怎么实现的，当然有兴趣的也可以深入分析。协议栈可以当成一个小型的操作系统。采用任务轮询的方法运行。</p>
+<h2 id="协议栈初始化了解">协议栈初始化了解</h2>
+<p>协议栈没什么神秘的，我们打开协议栈文件夹Texas Instruments\Projects\zstack。里面包含了TI公司的例程和工具。其中的功能我们会在用到的实验里讲解。再打开Samples文件夹，进入SampleApp文件夹。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image10.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="8">
+<li></li>
+</ol>
+<p>Samples文件夹里面有三个例子: GenericApp、SampleApp、SimpleApp在这里们选择SampleApp 对协议栈的工作流程进行讲解。打开 \SampleApp\CC2530DB 下工程文件SampleApp.eww。留意左边的工程目录，我们暂时只需要关注 Zmain文件夹和 App文件夹。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image11.png" alt="" loading="lazy">{width=&quot;1.575in&quot; height=&quot;3.7847222222222223in&quot;}</p>
+<ol start="9">
+<li></li>
+</ol>
+<p>任何程序都在 main 函数开始运行，Z-STACK自然也不例外。打开 Zmain.C,找到int main( void ) 函数。我们大概浏览一下 main 函数代码：</p>
+<p>/****************************************************************</p>
+<p>* @fn main</p>
+<p>* @brief First function called after startup.</p>
+<p>* @return don't care</p>
+<p>*/</p>
+<p>int main( void )</p>
+<p>{</p>
+<p>// Turn off interrupts</p>
+<p>osal_int_disable( INTS_ALL ); //关闭所有中断</p>
+<p>// Initialization for board related stuff such as LEDs</p>
+<p>HAL_BOARD_INIT(); //初始化系统时钟</p>
+<p>// Make sure supply voltage is high enough to run</p>
+<p>zmain_vdd_check(); //检查芯片电压是否正常</p>
+<p>// Initialize board I/O</p>
+<p>InitBoard( OB_COLD ); //初始化 I/O ，LED 、Timer 等</p>
+<p>// Initialze HAL drivers</p>
+<p>HalDriverInit(); //初始化芯片各硬件模块</p>
+<p>// Initialize NV System</p>
+<p>osal_nv_init( NULL ); // 初始化 Flash 存储器</p>
+<p>// Initialize the MAC</p>
+<p>ZmacInit(); //初始化 MAC 层</p>
+<p>// Determine the extended address</p>
+<p>zmain_ext_addr(); //确定 IEEE 64 位地址</p>
+<p>// Initialize basic NV items</p>
+<p>zgInit(); // 初始化非易失变量</p>
+<p>#ifndef NONWK</p>
+<p>// Since the AF isn't a task, call it's initialization routine</p>
+<p>afInit();</p>
+<p>#endif</p>
+<p>// Initialize the operating system</p>
+<p>osal_init_system(); // 初始化操作系统</p>
+<p>// Allow interrupts</p>
+<p>osal_int_enable( INTS_ALL ); // 使能全部中断</p>
+<p>// Final board initialization</p>
+<p>InitBoard( OB_READY ); // 初始化按键</p>
+<p>// Display information about this device</p>
+<p>zmain_dev_info(); //显示设备信息</p>
+<p>/* Display the device info on the LCD */</p>
+<p>#ifdef LCD_SUPPORTED</p>
+<p>zmain_lcd_init();</p>
+<p>#endif</p>
+<p>#ifdef WDT_IN_PM1</p>
+<p>/* If WDT is used, this is a good place to enable it. */</p>
+<p>WatchDogEnable( WDTIMX );</p>
+<p>#endif</p>
+<p>osal_start_system(); // No Return from here 执行操作系统，进去后不会返回</p>
+<p>return 0; // Shouldn't get here.</p>
+<p>}</p>
+<p>我们大概看了上面的代码后，可能感觉很多函数不认识。没关系，代码很有条理性，开始执行初始化工作。包括硬件、网络层、任务等的初始化。然后执行osal_start_system();操作系统。进去后可不会回来了。在这里，我们重点了解 2 个函数：osal_init_system(); 和osal_start_system();即初始化操作系统和开始运行操作系统。</p>
+<p>在函数名上单击右键------go to definition of...，或者鼠标点击函数名，按下F12按键，便可以进入函数。</p>
+<p>我们先来看osal_init_system();系统初始化函数，进入函数。发现里面有6个初始化函数，没事，这里我们只关心osalInitTasks();任务初始化函数。继续进入该函数。</p>
+<p>void osalInitTasks( void )</p>
+<p>{</p>
+<p>uint8 taskID = 0;</p>
+<p>// 分配内存，返回指向缓冲区的指针</p>
+<p>tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);</p>
+<p>// 设置所分配的内存空间单元值为 0</p>
+<p>osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));</p>
+<p>// 任务优先级由高向低依次排列，高优先级对应 taskID 的值反而小</p>
+<p>macTaskInit(taskID ++ ); //macTaskInit(0) ，用户不需考虑</p>
+<p>nwk_init(taskID ++ ); //nwk_init(1)，用户不需考虑</p>
+<p>Hal_Init(taskID ++ ); //Hal_Init(2) ，用户需考虑</p>
+<p>#if defined( MT_TASK ) 152</p>
+<p>MT_TaskInit(taskID ++ );</p>
+<p>#endif</p>
+<p>APS_Init(taskID ++ ); //APS_Init(3) ，用户不需考虑</p>
+<p>#if defined ( ZIGBEE_FRAGMENTATION )</p>
+<p>APSF_Init(taskID ++ );</p>
+<p>#endif</p>
+<p>ZDApp_Init(taskID ++ ); //ZDApp_Init(4) ，用户需考虑</p>
+<p>#if defined ( ZIGBEE_FREQ_AGILITY ) || defined ( ZIGBEE_PANID_CONFLICT )</p>
+<p>ZDNwkMgr_Init(taskID ++ );</p>
+<p>#endif</p>
+<p>SampleApp_Init(taskID ); // SampleApp_Init _Init(5) ，用户需考虑</p>
+<p>}</p>
+<p>我们可以这样理解，函数对 taskID个东西进行初始化，每初始化一个，taskID++。大家到了注释后面有些写着用户需要考虑，有些则写着用户不需考虑。没错，需要考虑的用户可以根据自己的硬件平台或者其他设置，而写着不需考虑的也是不能修改的。TI 公司出品协议栈已完成的东西。SampleApp_Init(taskID );很重要，也是我们应用协议栈例程的必需要函数，用户通常在这里初始化自己的东西。至此，osal_init_system()大概了解完毕。</p>
+<p>我们再来看第二个函数 osal_start_system();运行操作系统。同样用 go to definition 的方法进入该函数。结果发现很不理想。甚至很多函数形式没见过。其实这个是任务系统轮询的主要函数。他会查找发生的事件然后调用相应的 事件执行函数。如果没有事件登记要发生，么就进入睡眠模式。这个函数是永远不会返回的。</p>
+<p>我们来看一下这个函数的代码：</p>
+<p>void osal_start_system( void )</p>
+<p>{</p>
+<p>#if !defined ( ZBIT ) &amp;&amp; !defined ( UBIT )</p>
+<p>for(;😉 // Forever Loop</p>
+<p>#endif</p>
+<p>{</p>
+<p>uint8 idx = 0;</p>
+<p>osalTimeUpdate();//这里是在扫描哪个事件被触发了，然后置相应的标志位</p>
+<p>Hal_ProcessPoll(); // This replaces MT_SerialPoll() and osal_check_timer().</p>
+<p>Do {</p>
+<p>if (tasksEvents[idx]) // Task is highest priority that is ready.</p>
+<p>{</p>
+<p>break; // 得到待处理的最高优先级任务索引号 idx</p>
+<p>}</p>
+<p>} while (++idx &lt; tasksCnt);</p>
+<p>if (idx &lt; tasksCnt)</p>
+<p>{</p>
+<p>uint16 events;</p>
+<p>halIntState_t intState;</p>
+<p>HAL_ENTER_CRITICAL_SECTION(intState); // 进入临界区,保护</p>
+<p>events = tasksEvents[idx]; //提取需要处理的任务中的事件</p>
+<p>tasksEvents[idx] = 0; // Clear the Events for this task.清除本次任务的事件</p>
+<p>HAL_EXIT_CRITICAL_SECTION(intState); // 退出临界区</p>
+<p>events = (tasksArr[idx])( idx, events );//通过指针调用任务处理函数，关键</p>
+<p>HAL_ENTER_CRITICAL_SECTION(intState);//进入临界区</p>
+<p>tasksEvents[idx] |= events; // Add back unprocessed events to the current</p>
+<p>//task.保存未处理的事件</p>
+<p>HAL_EXIT_CRITICAL_SECTION(intState); // 退出临界区</p>
+<p>}</p>
+<p>#if defined( POWER_SAVING )</p>
+<p>else // Complete pass through all task events with no activity?</p>
+<p>{</p>
+<p>osal_pwrmgr_powerconserve(); // Put the processor/system into sleep</p>
+<p>}</p>
+<p>#endif</p>
+<p>}</p>
+<p>}</p>
+<p>我们来关注一下 events = tasksEvents[idx]; 进入 tasksEvents[idx]数组定义, 发现恰好在刚刚 osalInitTasks( void )函数上面。而且 taskID 一一对应。这就是初始化与调用的关系。taskID 把任务联系起来了。这就是协议栈的注意工作流程，如图2.2.3。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image12.png" alt="" loading="lazy">{width=&quot;1.575in&quot; height=&quot;3.1625in&quot;}</p>
+<ol start="10">
+<li>协议栈工作流程</li>
+</ol>
+<h2 id="协议栈的应用">协议栈的应用</h2>
+<p>其实我们最关心的，莫过于协议栈的应用了，一切学习都是以应用为主的。协议栈到底可以用来做什么呢？这是大家比较关心的问题了。先来告诉大家一下zigbee协议栈的应用吧。</p>
+<p>目前 ZigBee 的应用领域主要有:</p>
+<p>1. 智能家居物联网 （物联网似乎已经成了趋势，我们拭目以待）</p>
+<p>2. 工业、农业无线监测系统</p>
+<p>3. 个人监控、医院病人定位</p>
+<p>4. 消费电子</p>
+<p>5. 城市智能交通</p>
+<p>6. 户外作业及地下矿场安全监护</p>
+<p>...</p>
+<p>...</p>
+<p>小米的智能家居，用的就是zigbee进行数据传输。举个最简单的例子，在有功率放大器的情况下，终端节点和协调器的最大通讯距离为 200 米，我们在 200 米的地方加入 1 个节点设备作为路由器，那么终端就可以通过路由器转发，也就是说通讯距离可达 400 米。而且新节点加入现有网络极为方便。那么我们想一下，如果中间加入多个路由器的话，可以传输多远呢？</p>
+<h2 id="zigbee协议栈的应用层代码">Zigbee协议栈的应用层代码</h2>
 <p>了解过计算机网络的人都应该知道，计算机网络是按照OSI模型来进行传输的，zigbee协议栈同样也是按照这个模型进行传输数据的。IEEE 802.15.4 定义了 PHY（物理层）和 MAC（介质访问层）技术规范；ZigBee 联盟定义了 NWK（网络层）、APS（应用程序支持子层）、APL（应用层）技术规范。 ZigBee 协议栈就是将各个层定义的协议都集合在一起，以函数的形式实现，并给用户提供 API(应用层)，用户可以直接调用。如图2.4.1。</p>
-<p>图2.4.1 ZigBee 无线网络协议层<br>
-在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。<br>
-ZigBee 协议栈已经实现了 ZigBee 协议，用户可以使用协议栈提供的 API 进行应用程序的开发，在开发过程中完全不必关心ZigBee协议的具体实现细节，要关心的问题是：应用层的数据是使用哪些函数通过什么方式把数据发送出去或者把数据接收过来的。所以最重要的是我们要学会使用 ZigBee协议栈。<br>
-用户实现一个简单的无线数据通信时的一般步骤：<br>
-1、组网：调用协议栈的组网函数、加入网络函数，实现网络的建立与节点的加入。<br>
-2、发送：发送节点调用协议栈的无线数据发送函数，实现无线数据发送。<br>
-3、接收：接收节点调用协议栈的无线数据接收函数，实现无线数据接收。<br>
-而对于初学者来说，如何发送和接收数据才是最重要的。我们需要了解一下这个函数。<br>
-afStatus_t AF_DataRequest( afAddrType_t *dstAddr, endPointDesc_t *srcEP,<br>
-                           uint16 cID, uint16 len, uint8 *buf, uint8 *transID,<br>
-                           uint8 options, uint8 radius )</p>
-<p>*dstAddr--发送目的地址＋端点地址（端点号）和传送模式 <br>
-<em>srcEP --源(答复或确认)终端的描述（比如操作系统中任务ID等）源EP <br>
-cID      --被Profile指定的有效的集群号 <br>
-len       --发送数据长度 <br>
-<em>buf      --发送数据缓冲区 <br>
-<em>transID --任务ID号 <br>
-options  --有效位掩码的发送选项 <br>
-radius    --传送跳数，通常设置为AF_DEFAULT_RADIUS <br>
-在SampleAPP.c文件中，已经有一个封装好的函数可以发送数据，是通过调用这个函数来进行发送的，我们只要稍加改进，即可向其它zigbee发送我们想要发送的数据。<br>
-1、void SampleApp_SendPeriodicMessage( void )<br>
-2、 {<br>
-3、 if(AF_DataRequest(&amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,<br>
-4、 SAMPLEAPP_PERIODIC_CLUSTERID,<br>
-5、 1,<br>
-6、 (uint8</em>)&amp;SampleAppPeriodicCounter,<br>
-7、 &amp;SampleApp_TransID,<br>
-8、 AF_DISCV_ROUTE,<br>
-9、 AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )<br>
-10、 {<br>
-11、 }<br>
-12、 else<br>
-13、 {<br>
-14、 // Error occurred in request to send.<br>
-15、 }<br>
-16、 }<br>
-第 4 行：SAMPLEAPP_PERIODIC_CLUSTERID 这是一个新东西，其定义为：<br>
-#define SAMPLEAPP_PERIODIC_CLUSTERID 1 定义的作用是和接收方建立联系，协调器收到这个标号，如果是 1， 就证明是由周期性广播方式发送过来的。<br>
-第 5 行：1 是数据长度。<br>
-第 6 行：(uint8</em>)&amp;SampleAppPeriodicCounter 是要发送的内容。<br>
-知道代码功能后我们可以做以下修改，添加数据 0~9， 发送字符数 10 个，内容是 data 数组。<br>
-1、 void SampleApp_SendPeriodicMessage( void )<br>
-2、 {<br>
-3、 uint8 data[10]={‘0’,’1’,’2’,’3’,’4’,’5’,’6’,’7’,’8’,’9’};<br>
-4、 if(AF_DataRequest(&amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,<br>
-5、 SAMPLEAPP_PERIODIC_CLUSTERID,<br>
-6、 10,<br>
-7、 data, //指针方式<br>
-8、 &amp;SampleApp_TransID,<br>
-9、 AF_DISCV_ROUTE,<br>
-AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )<br>
-10、 {<br>
-11、 }<br>
-12、 else<br>
-13、 {<br>
-14、 // Error occurred in request to send.<br>
-15、 }<br>
-16、 }<br>
-至此，发送部分代码修改完成，只要我们调用这个函数，cc2530就会以广播式发送数据 0~9。<br>
-大家可能会觉得这个函数只能发送固定的字符串的话实在是太不灵活了，怎么样才能一个函数就可以发送我想要发送的字符串呢？办法一定是有的，我们接下来做一下对这个函数的修改。<br>
-void SampleApp_SendPeriodicMessage( uint8</em> data,uint8 x )<br>
-{<br>
-if ( AF_DataRequest( &amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,<br>
-SAMPLEAPP_PERIODIC_CLUSTERID,<br>
-x,<br>
-data, //指针方式<br>
-&amp;SampleApp_TransID,<br>
-AF_DISCV_ROUTE,<br>
-AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )<br>
-{<br>
-}<br>
-else<br>
-{<br>
-// Error occurred in request to send.<br>
-}<br>
-}<br>
-我们把函数的形参改变了，data为传输数据的地址，x为传输数据的长度。如果我们想要发送“Hello World\n”给其它设备的话，我们只需要调用SampleApp_SendPeriodicMessage(&quot;Hello World\n&quot;,13);注意，字符串末尾是有一个\0作为结束符号的，我们把这个结束符号也发送过去，方便接收到的函数进行数据处理。<br>
-在zigbee协议栈里发送数据之后，我们来看一下协议栈是怎么接收数据的。在处理接收到的数据之前，我们先初始化一下串口，让接收到的数据可以通过串口打印到电脑屏幕上。<br>
-串口发送其实很简单，步骤如下：<br>
-1、串口初始化<br>
-2、登记任务号<br>
-3、串口发送</p>
-<p>第一步：串口初始化<br>
-串口初始化大家很熟悉，就是配置串口号、波特率、流控、校验位等等。以前我们都是配置好寄存器然后使用。现在我们在 workspace 下找到HAL\Target\CC2530EB\drivers的 hal_uart.c 文件（图2.4.2），我们可以看到里面已经包括了串口初始化、发送、接收等函数，是不是觉得很方便？</p>
-<p>图2.4.2<br>
-浏览一下关于串口的操作函数还是挺全的，但是方便的东西还在后面！！！我们看看 workspace 上的 MT 层，发觉有很多基本函数，前面带MT。包括 MT_UART.C，我们打开这个文件。看到 MT_UartInit()函数，这里也有一个串口初 始化函数的，没错 Z-stack 上有一个 MT 层，用户可以选用 MT 层配置和调用其 他驱动。进一步简化了操作流程。 好了，我们已经知道串口配置的方法，那么应该在那里初始化呢？既然我 们用的是 SampleApp 例程，当然是在 SampleApp 的文件下面啦。我们打开APP目录下的 OSAL_SampleApp.C 文件，找到上节提到的 osalInitTasks（）任务初始化函数中的 SampleApp_Init（）函数，进入这个函数，发现原来在 SampleApp.c 文件中。我们在这里加入串口初始化代码。</p>
-<p>图2.4.3<br>
-我们在SampleApp_TransID = 0;下面加入以下代码。<br>
-//串口初始化<br>
-MT_UartInit();<br>
-MT_UartRegisterTaskID(task_id);<br>
-//登记任务号，即串口接收会在这个任务中产生事件。<br>
-到这一步，我们的串口初始化就完成了，接下来我们就看一下最重要的接收方是如何进行接收数据的。<br>
-我们打开 SampleApp.C 文件，在 uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events ) 事件处理函数中找到代码：<br>
-// Received when a messages is received (OTA) for this endpoint<br>
-case AF_INCOMING_MSG_CMD: SampleApp_MessageMSGCB( MSGpkt );<br>
-break;<br>
-其中 SampleApp_MessageMSGCB( MSGpkt );就是将接收到的数据包进行处理的函数。我们进入此函数，代码如下：<br>
-1、 void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )<br>
-2、 {<br>
-3、 uint16 flashTime;<br>
-4、 switch ( pkt-&gt;189lustered )<br>
-5、 {<br>
-6、 case SAMPLEAPP_PERIODIC_CLUSTERID:<br>
-7、 HalUARTWrite(0,”I get data\n”,11); //提示收到数据<br>
-8、 HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据<br>
-9、 break;<br>
-10、 case SAMPLEAPP_FLASH_CLUSTERID:<br>
-11、 flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );<br>
-12、 HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );<br>
-13、 break;<br>
-}<br>
-}<br>
-分别选择 CoordinatorEB-和 RouterEB 编译后对应下载到协调器和终端模块，协调器通过串口连接到电脑。我们看到串口收 到了数据，如图2.4.4（图片上的数据为笔者测试多台路由器组网后的数据，之后会介绍）。刚刚的数据将会显示SampleApp_ProcessEvent处理函数中if ( events &amp; SAMPLEAPP_SEND_PERIODIC_MSG_EVT )下面SampleApp_SendPeriodicMessage函数发送的内容。</p>
-<p>图2.4.4<br>
-现在我们对发送和接收做一个总结，程序运行过程中，SampleApp_SendPeriodicMessage函数将数据发送给其它设备，其它设备通过SampleApp_MessageMSGCB函数的SAMPLEAPP_PERIODIC_CLUSTERID事件来进行处理接收到的数据。组网的教程就到这里，接下来我们来使用多个zigbee开发板进行综合实验。读者也可以自己控制自己想要控制的东西，甚至控制家里的电灯，电风扇。</p>
-<h1 id="3-综合实验教程">3 综合实验教程</h1>
-<h2 id="31-实验现象">3.1 实验现象</h2>
-<h3 id="311-实验现象综述">3.1.1 实验现象综述</h3>
-<p>大部分实验的教程都是先一步一步来介绍操作，最后才告诉读者实验现象是什么，实验过程枯燥无味，而我们的这次实验则反其道而行之，先告诉读者我们的实验将会达到什么样的效果。引起读者的兴趣，然后让读者有目的的主动跟随着笔者去高效的做这个实验。<br>
-首先，我们的实验使用的IAR版本为8.2。使用到的协议栈版本为ZStack-CC2530-2.5.1a。要在电脑上准备好CH340的驱动以及CCDebug的驱动。这些我们在前面都有讲过，在这里就不多说了。<br>
-本次实验我们用到了七块CC2530的开发板，七块板建立七个工程文件如图3.1.1。</p>
-<p>图3.1.1<br>
-第一个工程是协调器的工程，将烧录到协调器。协调器就好比因特网中的根服务器，所有的设备都要连接到这个设备。<br>
-剩余六个设备都是路由器，大家也可以选成节点。<br>
-第二个工程是控制风扇的工程，我们可以使用第七个工程的按键来控制风扇的开关，也可以使用串口发送指定的内容给协调器进行控制风扇开关。<br>
-第三个工程是一个点对点通信的工程实验，也就是说r2这个路由器所发出的信息仅仅只有协调器可以接收到，路由器是不能接收到的。<br>
-第四个工程是广播通信的工程实验，在广播下，就好像是老师在课堂上上课一样，拿着话筒对着所有人说话。所有人都可以接收到。<br>
-第五个工程是一个控制震动器震动的工程，过串口发送指定的内容给协调器，我们可以控制震动器的震动开关。当然大家也可以通过自己的喜好来让按键进行控制。这就当做大家的课后作业吧。<br>
-第六个工程是火焰传感器的工程。通过串口发送指定的内容给协调器，我们可以获取到当前是否有火焰产生。当然大家也可以修改成使用中断方式触发，当产生火焰的时候自动报警。<br>
-第七个工程就是我们之前所说的按键的工程了，当我们按下这个按键的时候，路由器会告诉协调器这个按键被按下了，然后协调器会告诉风扇该打开了。大家可以凭借自己的想法来修改成自己想要的功能。比如说当按键按下后，风扇和震动器一起启动。<br>
-功能的介绍就到这里，下面我们看一下每一块开发板所产生的现象。</p>
-<h3 id="312-协调器实验现象">3.1.2 协调器实验现象</h3>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image13.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1479166666666667in&quot;}</p>
+<ol start="11">
+<li>ZigBee 无线网络协议层</li>
+</ol>
+<p>在开发一个应用时，协议较底下的层与应用是相互独立的，它们可以从第三方来获得，因此我们需要做的就只是在应用层进行相应的改动。</p>
+<p>ZigBee 协议栈已经实现了 ZigBee 协议，用户可以使用协议栈提供的 API 进行应用程序的开发，在开发过程中完全不必关心ZigBee协议的具体实现细节，要关心的问题是：应用层的数据是使用哪些函数通过什么方式把数据发送出去或者把数据接收过来的。所以最重要的是我们要学会使用 ZigBee协议栈。</p>
+<p>用户实现一个简单的无线数据通信时的一般步骤：</p>
+<p>1、组网：调用协议栈的组网函数、加入网络函数，实现网络的建立与节点的加入。</p>
+<p>2、发送：发送节点调用协议栈的无线数据发送函数，实现无线数据发送。</p>
+<p>3、接收：接收节点调用协议栈的无线数据接收函数，实现无线数据接收。</p>
+<p>而对于初学者来说，如何发送和接收数据才是最重要的。我们需要了解一下这个函数。</p>
+<p>afStatus_t AF_DataRequest( afAddrType_t *dstAddr, endPointDesc_t *srcEP,</p>
+<p>uint16 cID, uint16 len, uint8 *buf, uint8 *transID,</p>
+<p>uint8 options, uint8 radius )</p>
+<p>*dstAddr--发送目的地址＋端点地址（端点号）和传送模式</p>
+<p>*srcEP --源(答复或确认)终端的描述（比如操作系统中任务ID等）源EP</p>
+<p>cID      --被Profile指定的有效的集群号</p>
+<p>len       --发送数据长度</p>
+<p>*buf      --发送数据缓冲区</p>
+<p>*transID --任务ID号</p>
+<p>options  --有效位掩码的发送选项</p>
+<p>radius    --传送跳数，通常设置为AF_DEFAULT_RADIUS</p>
+<p>在SampleAPP.c文件中，已经有一个封装好的函数可以发送数据，是通过调用这个函数来进行发送的，我们只要稍加改进，即可向其它zigbee发送我们想要发送的数据。</p>
+<p>1、void SampleApp_SendPeriodicMessage( void )</p>
+<p>2、 {</p>
+<p>3、 if(AF_DataRequest(&amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,</p>
+<p>4、 SAMPLEAPP_PERIODIC_CLUSTERID,</p>
+<p>5、 1,</p>
+<p>6、 (uint8*)&amp;SampleAppPeriodicCounter,</p>
+<p>7、 &amp;SampleApp_TransID,</p>
+<p>8、 AF_DISCV_ROUTE,</p>
+<p>9、 AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )</p>
+<p>10、 {</p>
+<p>11、 }</p>
+<p>12、 else</p>
+<p>13、 {</p>
+<p>14、 // Error occurred in request to send.</p>
+<p>15、 }</p>
+<p>16、 }</p>
+<p>第 4 行：SAMPLEAPP_PERIODIC_CLUSTERID 这是一个新东西，其定义为：</p>
+<p>#define SAMPLEAPP_PERIODIC_CLUSTERID 1 定义的作用是和接收方建立联系，协调器收到这个标号，如果是 1， 就证明是由周期性广播方式发送过来的。</p>
+<p>第 5 行：1 是数据长度。</p>
+<p>第 6 行：(uint8*)&amp;SampleAppPeriodicCounter 是要发送的内容。</p>
+<p>知道代码功能后我们可以做以下修改，添加数据 0~9， 发送字符数 10 个，内容是 data 数组。</p>
+<p>1、 void SampleApp_SendPeriodicMessage( void )</p>
+<p>2、 {</p>
+<p>3、 uint8 data[10]={'0','1','2','3','4','5','6','7','8','9'};</p>
+<p>4、 if(AF_DataRequest(&amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,</p>
+<p>5、 SAMPLEAPP_PERIODIC_CLUSTERID,</p>
+<p>6、 10,</p>
+<p>7、 data, //指针方式</p>
+<p>8、 &amp;SampleApp_TransID,</p>
+<p>9、 AF_DISCV_ROUTE,</p>
+<p>AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )</p>
+<p>10、 {</p>
+<p>11、 }</p>
+<p>12、 else</p>
+<p>13、 {</p>
+<p>14、 // Error occurred in request to send.</p>
+<p>15、 }</p>
+<p>16、 }</p>
+<p>至此，发送部分代码修改完成，只要我们调用这个函数，cc2530就会以广播式发送数据 0~9。</p>
+<p>大家可能会觉得这个函数只能发送固定的字符串的话实在是太不灵活了，怎么样才能一个函数就可以发送我想要发送的字符串呢？办法一定是有的，我们接下来做一下对这个函数的修改。</p>
+<p>void SampleApp_SendPeriodicMessage( uint8* data,uint8 x )</p>
+<p>{</p>
+<p>if ( AF_DataRequest( &amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,</p>
+<p>SAMPLEAPP_PERIODIC_CLUSTERID,</p>
+<p>x,</p>
+<p>data, //指针方式</p>
+<p>&amp;SampleApp_TransID,</p>
+<p>AF_DISCV_ROUTE,</p>
+<p>AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )</p>
+<p>{</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>// Error occurred in request to send.</p>
+<p>}</p>
+<p>}</p>
+<p>我们把函数的形参改变了，data为传输数据的地址，x为传输数据的长度。如果我们想要发送&quot;Hello World\n&quot;给其它设备的话，我们只需要调用SampleApp_SendPeriodicMessage(&quot;Hello World\n&quot;,13);注意，字符串末尾是有一个\0作为结束符号的，我们把这个结束符号也发送过去，方便接收到的函数进行数据处理。</p>
+<p>在zigbee协议栈里发送数据之后，我们来看一下协议栈是怎么接收数据的。在处理接收到的数据之前，我们先初始化一下串口，让接收到的数据可以通过串口打印到电脑屏幕上。</p>
+<p>串口发送其实很简单，步骤如下：</p>
+<p>1、串口初始化</p>
+<p>2、登记任务号</p>
+<p>3、串口发送</p>
+<p>第一步：串口初始化</p>
+<p>串口初始化大家很熟悉，就是配置串口号、波特率、流控、校验位等等。以前我们都是配置好寄存器然后使用。现在我们在 workspace 下找到HAL\Target\CC2530EB\drivers的 hal_uart.c 文件（图2.4.2），我们可以看到里面已经包括了串口初始化、发送、接收等函数，是不是觉得很方便？</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image14.png" alt="" loading="lazy">{width=&quot;2.3625in&quot; height=&quot;2.9166666666666665in&quot;}</p>
+<ol start="12">
+<li></li>
+</ol>
+<p>浏览一下关于串口的操作函数还是挺全的，但是方便的东西还在后面！！！我们看看 workspace 上的 MT 层，发觉有很多基本函数，前面带MT。包括 MT_UART.C，我们打开这个文件。看到 MT_UartInit()函数，这里也有一个串口初 始化函数的，没错 Z-stack 上有一个 MT 层，用户可以选用 MT 层配置和调用其 他驱动。进一步简化了操作流程。 好了，我们已经知道串口配置的方法，那么应该在那里初始化呢？既然我 们用的是 SampleApp 例程，当然是在 SampleApp 的文件下面啦。我们打开APP目录下的 OSAL_SampleApp.C 文件，找到上节提到的 osalInitTasks（）任务初始化函数中的 SampleApp_Init（）函数，进入这个函数，发现原来在 SampleApp.c 文件中。我们在这里加入串口初始化代码。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image15.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.0861111111111112in&quot;}</p>
+<ol start="13">
+<li></li>
+</ol>
+<p>我们在SampleApp_TransID = 0;下面加入以下代码。</p>
+<p>//串口初始化</p>
+<p>MT_UartInit();</p>
+<p>MT_UartRegisterTaskID(task_id);</p>
+<p>//登记任务号，即串口接收会在这个任务中产生事件。</p>
+<p>到这一步，我们的串口初始化就完成了，接下来我们就看一下最重要的接收方是如何进行接收数据的。</p>
+<p>我们打开 SampleApp.C 文件，在 uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events ) 事件处理函数中找到代码：</p>
+<p>// Received when a messages is received (OTA) for this endpoint</p>
+<p>case AF_INCOMING_MSG_CMD: SampleApp_MessageMSGCB( MSGpkt );</p>
+<p>break;</p>
+<p>其中 SampleApp_MessageMSGCB( MSGpkt );就是将接收到的数据包进行处理的函数。我们进入此函数，代码如下：</p>
+<p>1、 void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )</p>
+<p>2、 {</p>
+<p>3、 uint16 flashTime;</p>
+<p>4、 switch ( pkt-&gt;189lustered )</p>
+<p>5、 {</p>
+<p>6、 case SAMPLEAPP_PERIODIC_CLUSTERID:</p>
+<p>7、 HalUARTWrite(0,&quot;I get data\n&quot;,11); //提示收到数据</p>
+<p>8、 HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据</p>
+<p>9、 break;</p>
+<p>10、 case SAMPLEAPP_FLASH_CLUSTERID:</p>
+<p>11、 flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );</p>
+<p>12、 HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );</p>
+<p>13、 break;</p>
+<p>}</p>
+<p>}</p>
+<p>分别选择 CoordinatorEB-和 RouterEB 编译后对应下载到协调器和终端模块，协调器通过串口连接到电脑。我们看到串口收 到了数据，如图2.4.4（图片上的数据为笔者测试多台路由器组网后的数据，之后会介绍）。刚刚的数据将会显示SampleApp_ProcessEvent处理函数中if ( events &amp; SAMPLEAPP_SEND_PERIODIC_MSG_EVT )下面SampleApp_SendPeriodicMessage函数发送的内容。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image16.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+<ol start="14">
+<li></li>
+</ol>
+<p>现在我们对发送和接收做一个总结，程序运行过程中，SampleApp_SendPeriodicMessage函数将数据发送给其它设备，其它设备通过SampleApp_MessageMSGCB函数的SAMPLEAPP_PERIODIC_CLUSTERID事件来进行处理接收到的数据。组网的教程就到这里，接下来我们来使用多个zigbee开发板进行综合实验。读者也可以自己控制自己想要控制的东西，甚至控制家里的电灯，电风扇。</p>
+<h1 id="综合实验教程">综合实验教程</h1>
+<h2 id="实验现象">实验现象</h2>
+<h3 id="实验现象综述">实验现象综述</h3>
+<p>大部分实验的教程都是先一步一步来介绍操作，最后才告诉读者实验现象是什么，实验过程枯燥无味，而我们的这次实验则反其道而行之，先告诉读者我们的实验将会达到什么样的效果。引起读者的兴趣，然后让读者有目的的主动跟随着笔者去高效的做这个实验。</p>
+<p>首先，我们的实验使用的IAR版本为8.2。使用到的协议栈版本为ZStack-CC2530-2.5.1a。要在电脑上准备好CH340的驱动以及CCDebug的驱动。这些我们在前面都有讲过，在这里就不多说了。</p>
+<p>本次实验我们用到了七块CC2530的开发板，七块板建立七个工程文件如图3.1.1。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image17.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="15">
+<li></li>
+</ol>
+<p>第一个工程是协调器的工程，将烧录到协调器。协调器就好比因特网中的根服务器，所有的设备都要连接到这个设备。</p>
+<p>剩余六个设备都是路由器，大家也可以选成节点。</p>
+<p>第二个工程是控制风扇的工程，我们可以使用第七个工程的按键来控制风扇的开关，也可以使用串口发送指定的内容给协调器进行控制风扇开关。</p>
+<p>第三个工程是一个点对点通信的工程实验，也就是说r2这个路由器所发出的信息仅仅只有协调器可以接收到，路由器是不能接收到的。</p>
+<p>第四个工程是广播通信的工程实验，在广播下，就好像是老师在课堂上上课一样，拿着话筒对着所有人说话。所有人都可以接收到。</p>
+<p>第五个工程是一个控制震动器震动的工程，过串口发送指定的内容给协调器，我们可以控制震动器的震动开关。当然大家也可以通过自己的喜好来让按键进行控制。这就当做大家的课后作业吧。</p>
+<p>第六个工程是火焰传感器的工程。通过串口发送指定的内容给协调器，我们可以获取到当前是否有火焰产生。当然大家也可以修改成使用中断方式触发，当产生火焰的时候自动报警。</p>
+<p>第七个工程就是我们之前所说的按键的工程了，当我们按下这个按键的时候，路由器会告诉协调器这个按键被按下了，然后协调器会告诉风扇该打开了。大家可以凭借自己的想法来修改成自己想要的功能。比如说当按键按下后，风扇和震动器一起启动。</p>
+<p>功能的介绍就到这里，下面我们看一下每一块开发板所产生的现象。</p>
+<h3 id="协调器实验现象">协调器实验现象</h3>
 <p>首先我们来看一下协调器，如图3.1.2所示。</p>
-<p>图3.1.2<br>
-协调器会收到一堆数据，那是因为每一个路由器都会定时向协调器发送数据。我们可以看到总共有六个设备向协调器发送数据。<br>
-当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。而在实际的电路连接上，笔者将风扇连接到了一块继电器上，开发板通过控制继电器的当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。开关来控制风扇。如图图3.1.3。</p>
-<p>图3.1.3 风扇转动<br>
-当我们使用串口发送00 fe 00 00 02 给协调器的时候，控制震动器的那一块开发板便会收到命令，震动器将会启动。<br>
-当我们使用串口发送00 fe 00 00 03 给协调器的时候，控制火焰传感器的那一块开发板便会收到命令，发送当前是否有火焰给协调器。</p>
-<p>图3.1.4</p>
-<h3 id="313-路由器1实验现象">3.1.3 路由器1实验现象</h3>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image18.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+<ol start="16">
+<li></li>
+</ol>
+<p>协调器会收到一堆数据，那是因为每一个路由器都会定时向协调器发送数据。我们可以看到总共有六个设备向协调器发送数据。</p>
+<p>当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。而在实际的电路连接上，笔者将风扇连接到了一块继电器上，开发板通过控制继电器的当我们使用串口发送00 fe 00 00 01 给协调器的时候，控制风扇的那一块开发板便会收到命令，风扇将会启动。开关来控制风扇。如图图3.1.3。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image19.jpeg" alt="IMG_20191125_142313" loading="lazy">{width=&quot;2.3625in&quot; height=&quot;2.3777777777777778in&quot;}</p>
+<ol start="17">
+<li>风扇转动</li>
+</ol>
+<p>当我们使用串口发送00 fe 00 00 02 给协调器的时候，控制震动器的那一块开发板便会收到命令，震动器将会启动。</p>
+<p>当我们使用串口发送00 fe 00 00 03 给协调器的时候，控制火焰传感器的那一块开发板便会收到命令，发送当前是否有火焰给协调器。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image20.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+<ol start="18">
+<li></li>
+</ol>
+<h3 id="路由器1实验现象">路由器1实验现象</h3>
 <p>路由器1每隔3秒钟便会发送I am fan 给协调器，协调器通过串口将其打印到屏幕上。当路由器1收到fan的时候。风扇状态会发生变化。根据其它开发板程序代码，即当串口发送00 fe 00 00 01给协调器的时候或者当路由器6上的按键被按下后，风扇的状态发生变化。</p>
-<h3 id="314-路由器2实验现象">3.1.4 路由器2实验现象</h3>
+<h3 id="路由器2实验现象">路由器2实验现象</h3>
 <p>路由器2每隔一段时间使用点对点通信发送0123456789给协调器。协调器会收到点对点通信数据并通过串口在显示屏上打印出来。</p>
-<h3 id="315-路由器3实验现象">3.1.5 路由器3实验现象</h3>
+<h3 id="路由器3实验现象">路由器3实验现象</h3>
 <p>路由器3每隔一段时间使用广播通信发送I am r3。即协调器会收到广播数据并通过串口在显示屏上打印出来。</p>
-<h3 id="316-路由器4实验现象">3.1.6 路由器4实验现象</h3>
+<h3 id="路由器4实验现象">路由器4实验现象</h3>
 <p>路由器4每隔3秒钟便会发送I am motor给协调器，协调器通过串口将其打印到屏幕上。当路由器1收到motor的时候。震动器状态会发生变化。根据其它开发板程序代码，即当串口发送00 fe 00 00 02给协调器的时候震动器的状态发生变化。</p>
-<h3 id="317-路由器5实验现象">3.1.7 路由器5实验现象</h3>
+<h3 id="路由器5实验现象">路由器5实验现象</h3>
 <p>路由器5每隔3秒钟便会发送I am flame sensor给协调器，协调器通过串口将其打印到屏幕上。即当串口发送00 fe 00 00 03给协调器的时候，协调器会发送flame给路由器5，路由器5接收到数据后会返回当前的火焰传感器状态给协调器。协调器会通过串口打印到屏幕上。如图3.1.5：</p>
-<p>图3.1.5</p>
-<h3 id="318-路由器6实验现象">3.1.8 路由器6实验现象</h3>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image21.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+<ol start="19">
+<li></li>
+</ol>
+<h3 id="路由器6实验现象">路由器6实验现象</h3>
+<blockquote>
 <p>路由器6每隔3秒钟便会发送I am KEY给协调器，协调器通过串口将其打印到屏幕上。当路由器6所在开发板上的按键被按下后，会发送fan给路由器1，路由器1收到数据后会改变风扇的状态。不仅如此，当按键被按下后，路由器6会发送KEY has been pressed给协调器，协调器通过串口打印到屏幕上。如图3.1.6：</p>
-<p>图3.1.6</p>
-<h2 id="32-实验代码讲解">3.2 实验代码讲解</h2>
-<h3 id="321-协调器代码修改步骤讲解">3.2.1 协调器代码修改步骤讲解</h3>
-<p>讲了那么多实验现象，是不是对zigbee传输产生兴趣了呢？前面那些都是铺垫，我们zigbee协议栈的实验现在才正式开始。接下来我们先讲解一下协调器的代码。<br>
-我们打开Z-stack目录Projects\zstack\Samples\SamplesAPP\CC2530D里面的 SampleApp.eww 工程。这次试验我们直接基于协议栈的SampleApp 来进行。 在此之前，我们先把SamplesAPP文件夹复制七份，重新命名为如图3.2.1所示，因为我们有七块开发板，所以我们需要七个工程来分别编写代码。，然后我们打开co文件夹下的工程文件。该工程我们准备作为协调器的工程。</p>
-<p>图3.2.1</p>
-<p>打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！<br>
-否则之后所有的操作都将是徒劳的。</p>
-<p>图3.2.2<br>
-修改完ID号之后，我们可以有选择的修改信道，在ID号上面，我们可以把信道改成其它的信道，防止信道过于繁忙导致传输过程中丢包。此处笔者建议使用15,20,25,26四个信道，因为在这几个信道下，Wi-Fi信号对其干扰最小，毕竟zigbee不管是功率还是抗干扰能力都比不上Wi-Fi。</p>
-<p>图3.2.3<br>
-这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：<br>
-//串口初始化<br>
-MT_UartInit();<br>
-MT_UartRegisterTaskID(task_id);//登记任务号<br>
-功能在之前串口初始化的时候已经介绍了，在此就不多说了。</p>
-<p>图3.2.4<br>
-然后我们进入SampleApp_ProcessEvent函数，找到case CMD_SERIAL_MSG。然后将其内容改成：<br>
-case CMD_SERIAL_MSG:<br>
-{<br>
-switch (UartMsg-&gt;msg[2])<br>
-{<br>
-case 0x01:<br>
-{<br>
-SampleApp_SendPeriodicMessage(&quot;fan\n&quot;,5);<br>
-HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示<br>
-}<br>
-break;<br>
-case 0x02:<br>
-{<br>
-SampleApp_SendPeriodicMessage(&quot;motor\n&quot;,7);<br>
-HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示<br>
-}<br>
-break;<br>
-case 0x03:<br>
-{<br>
-SampleApp_SendPeriodicMessage(&quot;flame\n&quot;,7);<br>
-HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示<br>
-}<br>
-break;<br>
-}<br>
-如图3.2.5所示：</p>
-<p>图3.2.5<br>
-原因是当协调器收到数据时，我们要根据指令做出不同的操作。可能有同学要问了，为什么我们只判断一个字节，却要用串口发送许多数据呢？因为我们是通过协议栈提供的API来接收数据的。以前我们做的都是 CC2530 给 PC 机串口发信息，还没接触过 PC 机发送给 CC2530，现在我们就来完成这个任务。其主要代码在 MT_UART.C 中。我们之前协议栈串口实验对串口初始化时候已经有所了解了。我们在这个文件里找到串口初始化函数 void MT_UartInit ()，找到下面代码：<br>
-#if defined (ZTOOL_P1) || defined (ZTOOL_P2)<br>
-uartConfig.callBackFunc = MT_UartProcessZToolData;<br>
-#elif defined (ZAPP_P1) || defined (ZAPP_P2)<br>
-uartConfig.callBackFunc = MT_UartProcessZAppData;#else<br>
-uartConfig.callBackFunc = NULL;<br>
-#endif<br>
-协议栈已经默认定义了ZTOOL_P1，如图3.2.6，所以我们不需要修改。这个是预编译，根据预先定义的 ZTOOL 或者 ZAPP 选择不同的数据处理函数。后面的 P1和 P2则是串口0和串口 1。我们用 ZTOOL，串口0。我们可以在option——C/C++ 的 CompilerPreprocessor 里 面看到,已经默认添加 ZTOOL_P1 预编译。<br>
-下边是对函数关键地方的解释。</p>
-<p>图3.2.6<br>
-/****************************************************************</p>
-<ul>
-<li>@fn MT_UartProcessZToolData</li>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image22.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+</blockquote>
+<ol start="20">
 <li></li>
-<li>@brief | SOP | Data Length | CMD | Data | FCS |</li>
-<li>| 1 | 1 | 2 | 0-Len | 1 |</li>
+</ol>
+<h2 id="实验代码讲解">实验代码讲解</h2>
+<h3 id="协调器代码修改步骤讲解">协调器代码修改步骤讲解</h3>
+<p>讲了那么多实验现象，是不是对zigbee传输产生兴趣了呢？前面那些都是铺垫，我们zigbee协议栈的实验现在才正式开始。接下来我们先讲解一下协调器的代码。</p>
+<p>我们打开Z-stack目录Projects\zstack\Samples\SamplesAPP\CC2530D里面的 SampleApp.eww 工程。这次试验我们直接基于协议栈的SampleApp 来进行。 在此之前，我们先把SamplesAPP文件夹复制七份，重新命名为如图3.2.1所示，因为我们有七块开发板，所以我们需要七个工程来分别编写代码。，然后我们打开co文件夹下的工程文件。该工程我们准备作为协调器的工程。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image23.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="21">
 <li></li>
-<li>Parses the data and determine either is SPI or just simply serial data</li>
-<li>then send the data to correct place (MT or APP)</li>
+</ol>
+<p>打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。</p>
+<blockquote>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与别人不一样的ID号！</p>
+</blockquote>
+<p>否则之后所有的操作都将是徒劳的。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image24.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.0861111111111112in&quot;}</p>
+<ol start="22">
 <li></li>
-<li>@param port - UART port</li>
-<li>event - Event that causes the callback</li>
-<li>@return None<br>
-******************************************************<em><em><em><em><em><em><em><em><em><em>/<br>
-/</em> 这个函数很长，具体说来就是把串口发来的数据包进行打包，校验，生成一个消息，发给处理数据包的任务。如果你看过 MT 的文档，应该知道如果用 ZTOOL 通过串口来沟通协议栈，那么发过来的串口数据具有以下格式：0xFE, DataLength, CM0, CM1, Data payload, FCS<br>
-翻译： 0xFE：数据帧头<br>
-DataLength：Datapayload 的数据长度，以字节计，低字节在前；<br>
-CM0：命令低字节；<br>
-CM1：命令高字节；(ZTOOL 软件就是通过发送一系列命令给 MT 实现和协议栈交互)<br>
-Data payload：数据帧具体的数据，这个长度是可变的，但是要和DataLength 一致；<br>
-FCS ：校验和，从DataLength 字节开始到 Data payload 最后一个字节所有字节的异或按字节操作。<br>
-也就是说，如果 PC 机想通过串口发送信息给 CC2530，由于是使用默认的串口函数，所以您必须按上面的格式发送，否则 CC2530 是收不到任何东西的，这也是我们大家在调试串口接收时一直打圈的地方。这个机制是非常完善的，我们要了解自带的这个函数。<br>
-Void MT_UartProcessZToolData ( uint8 port, uint8 event )<br>
-{<br>
-…<br>
-…<br>
-while (Hal_UART_RxBufLen(port))<br>
-/<em>查询缓冲区读信息,也成了这里信息是否接收完的标志</em>/<br>
-{<br>
-HalUARTRead (port, &amp;ch, 1);<br>
-/<em>一个一个地读，读完一个缓冲区就清 1 个了，？为什么这样呢，往下看</em>/<br>
-switch (state)<br>
-/<em>用上状态机了</em>/<br>
-{<br>
-case SOP_STATE:<br>
-if (ch == MT_UART_SOF) /</em> MT_UART_SOF 的值默认是 0xFE,所以数<br>
-据必须 FE 格式开始发送才能进入下一个状态，不然永远在这里转圈</em>/<br>
-state = LEN_STATE;<br>
-break;<br>
-case LEN_STATE:<br>
-LEN_Token = ch;<br>
-tempDataLen = 0;<br>
-/</em> Allocate memory for the data <em>/<br>
-pMsg = (mtOSALSerialData_t <em>)osal_msg_allocate( sizeof<br>
-( mtOSALSerialData_t ) +MT_RPC_FRAME_HDR_SZ + LEN_Token );<br>
-/</em> 分配内存空间</em>/<br>
-if (pMsg) /</em> 如果分配成功</em>/<br>
-{<br>
-/</em> Fill up what we can <em>/<br>
-pMsg-&gt;hdr.event = CMD_SERIAL_MSG;<br>
-/</em> 注册事件号 CMD_SERIAL_MSG;，很有用</em>/<br>
-pMsg-&gt;msg = (uint8</em>)(pMsg+1);<br>
-/<em>定位数据位置</em>/<br>
-…<br>
-…<br>
-…<br>
-/</em> Make sure it’s correct <em>/tmp=MT_UartCalcFCS((uint8</em>)&amp;pMsg-&gt;msg[0], MT_RPC_FRAME_HDR_SZ</li>
-</ul>
-<ul>
-<li>
-<p>LEN_Token);<br>
-if (tmp == FSC_Token) /<em>数据校验</em>/<br>
-{<br>
-osal_msg_send( App_TaskID, (byte <em>)pMsg );<br>
-/<em>把数据包发送到 OSAL 层，很很重要</em>/<br>
-}<br>
-else<br>
-{<br>
-/</em> deallocate the msg */<br>
-osal_msg_deallocate ( (uint8 <em>)pMsg );<br>
-/<em>清申请的内存空间</em>/<br>
-}<br>
-/</em> Reset the state, send or discard the buffers at this point */<br>
-state = SOP_STATE; /<em>状态机一周期完成</em>/<br>
-…<br>
-…<br>
-…<br>
-简单看了一下代码，串口从 PC 机接收到信息会做如下处理：<br>
-1、接收串口数据，判断起始码是否为 0xFE<br>
-2、得到数据长度然后给数据包 pMsg 分配内存<br>
-3、给数据包 pMsg 装数据<br>
-4、打包成任务发给上层 OSAL 待处理<br>
-5、释放数据包内存<br>
-所以说，我们想要通过串口发送数据给协调器，就必须按照这个规则来，我们已控制风扇的命令做一下讲解。<br>
-风扇控制命令是00 fe 00 00 01。大家可能会问了，不是以FE开头吗，为什么前面还多了一个00呢？那是因为我在实验的时候，发现在发送fe的时候，协调器所收到的数据并不一定是fe，而在前面加了一个00后，收到的数据就十分稳定了。Fe后面的00代表我们的数据长度为0，因为我们并不需要发送数据。最后两个字节是命令，我们在代码里仅仅判断了最后一个字节。当最后一个字节是01的时候，说明我们是想要控制风扇。<br>
-修改完CMD_SERIAL_MSG事件的代码之后，我们进入SampleApp_MessageMSGCB函数。将其修改成以下：<br>
-void SampleApp_MessageMSGCB( afIncomingMSGPacket_t <em>pkt )<br>
-{<br>
-uint16 flashTime;<br>
-uint8 len;<br>
-switch ( pkt-&gt;clusterId )<br>
-{<br>
-case SAMPLEAPP_PERIODIC_CLUSTERID:<br>
-len=my_strlen((char</em>)(pkt-&gt;cmd.Data));<br>
-HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据</p>
-<pre><code>break;
-</code></pre>
-<p>case SAMPLEAPP_FLASH_CLUSTERID:<br>
-flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );<br>
-HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );<br>
-break;</p>
+</ol>
+<p>修改完ID号之后，我们可以有选择的修改信道，在ID号上面，我们可以把信道改成其它的信道，防止信道过于繁忙导致传输过程中丢包。此处笔者建议使用15,20,25,26四个信道，因为在这几个信道下，Wi-Fi信号对其干扰最小，毕竟zigbee不管是功率还是抗干扰能力都比不上Wi-Fi。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image25.png" alt="" loading="lazy">{width=&quot;5.761111111111111in&quot; height=&quot;3.120833333333333in&quot;}</p>
+<ol start="23">
+<li></li>
+</ol>
+<p>这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：</p>
+<p>//串口初始化</p>
+<p>MT_UartInit();</p>
+<p>MT_UartRegisterTaskID(task_id);//登记任务号</p>
+<p>功能在之前串口初始化的时候已经介绍了，在此就不多说了。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image26.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.3819444444444446in&quot;}</p>
+<ol start="24">
+<li></li>
+</ol>
+<p>然后我们进入SampleApp_ProcessEvent函数，找到case CMD_SERIAL_MSG。然后将其内容改成：</p>
+<p>case CMD_SERIAL_MSG:</p>
+<p>{</p>
+<p>switch (UartMsg-&gt;msg[2])</p>
+<p>{</p>
+<p>case 0x01:</p>
+<p>{</p>
+<p>SampleApp_SendPeriodicMessage(&quot;fan\n&quot;,5);</p>
+<p>HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示</p>
+<p>}</p>
+<p>break;</p>
+<p>case 0x02:</p>
+<p>{</p>
+<p>SampleApp_SendPeriodicMessage(&quot;motor\n&quot;,7);</p>
+<p>HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示</p>
+<p>}</p>
+<p>break;</p>
+<p>case 0x03:</p>
+<p>{</p>
+<p>SampleApp_SendPeriodicMessage(&quot;flame\n&quot;,7);</p>
+<p>HalUARTWrite(0,&quot;ok\r\n&quot;,4);//串口提示</p>
+<p>}</p>
+<p>break;</p>
+<p>}</p>
+<p>如图3.2.5所示：</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image27.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.745833333333333in&quot;}</p>
+<ol start="25">
+<li></li>
+</ol>
+<p>原因是当协调器收到数据时，我们要根据指令做出不同的操作。可能有同学要问了，为什么我们只判断一个字节，却要用串口发送许多数据呢？因为我们是通过协议栈提供的API来接收数据的。以前我们做的都是 CC2530 给 PC 机串口发信息，还没接触过 PC 机发送给 CC2530，现在我们就来完成这个任务。其主要代码在 MT_UART.C 中。我们之前协议栈串口实验对串口初始化时候已经有所了解了。我们在这个文件里找到串口初始化函数 void MT_UartInit ()，找到下面代码：</p>
+<p>#if defined (ZTOOL_P1) || defined (ZTOOL_P2)</p>
+<p>uartConfig.callBackFunc = MT_UartProcessZToolData;</p>
+<p>#elif defined (ZAPP_P1) || defined (ZAPP_P2)</p>
+<p>uartConfig.callBackFunc = MT_UartProcessZAppData;#else</p>
+<p>uartConfig.callBackFunc = NULL;</p>
+<p>#endif</p>
+<p>协议栈已经默认定义了ZTOOL_P1，如图3.2.6，所以我们不需要修改。这个是预编译，根据预先定义的 ZTOOL 或者 ZAPP 选择不同的数据处理函数。后面的 P1和 P2则是串口0和串口 1。我们用 ZTOOL，串口0。我们可以在option------C/C++ 的 CompilerPreprocessor 里 面看到,已经默认添加 ZTOOL_P1 预编译。</p>
+<p>下边是对函数关键地方的解释。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image28.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;3.138888888888889in&quot;}</p>
+<ol start="26">
+<li></li>
+</ol>
+<p>/****************************************************************</p>
+<p>* @fn MT_UartProcessZToolData</p>
+<p>*</p>
+<p>* @brief | SOP | Data Length | CMD | Data | FCS |</p>
+<p>* | 1 | 1 | 2 | 0-Len | 1 |</p>
+<p>*</p>
+<p>* Parses the data and determine either is SPI or just simply serial data</p>
+<p>* then send the data to correct place (MT or APP)</p>
+<p>*</p>
+<p>* @param port - UART port</p>
+<p>* event - Event that causes the callback</p>
+<p>* @return None</p>
+<p>****************************************************************/</p>
+<p>/* 这个函数很长，具体说来就是把串口发来的数据包进行打包，校验，生成一个消息，发给处理数据包的任务。如果你看过 MT 的文档，应该知道如果用 ZTOOL 通过串口来沟通协议栈，那么发过来的串口数据具有以下格式：0xFE, DataLength, CM0, CM1, Data payload, FCS</p>
+<p>翻译： 0xFE：数据帧头</p>
+<p>DataLength：Datapayload 的数据长度，以字节计，低字节在前；</p>
+<p>CM0：命令低字节；</p>
+<p>CM1：命令高字节；(ZTOOL 软件就是通过发送一系列命令给 MT 实现和协议栈交互)</p>
+<p>Data payload：数据帧具体的数据，这个长度是可变的，但是要和DataLength 一致；</p>
+<p>FCS ：校验和，从DataLength 字节开始到 Data payload 最后一个字节所有字节的异或按字节操作。</p>
+<p>也就是说，如果 PC 机想通过串口发送信息给 CC2530，由于是使用默认的串口函数，所以您必须按上面的格式发送，否则 CC2530 是收不到任何东西的，这也是我们大家在调试串口接收时一直打圈的地方。这个机制是非常完善的，我们要了解自带的这个函数。</p>
+<p>Void MT_UartProcessZToolData ( uint8 port, uint8 event )</p>
+<p>{</p>
+<p>...</p>
+<p>...</p>
+<p>while (Hal_UART_RxBufLen(port))</p>
+<p>/*查询缓冲区读信息,也成了这里信息是否接收完的标志*/</p>
+<p>{</p>
+<p>HalUARTRead (port, &amp;ch, 1);</p>
+<p>/*一个一个地读，读完一个缓冲区就清 1 个了，？为什么这样呢，往下看*/</p>
+<p>switch (state)</p>
+<p>/*用上状态机了*/</p>
+<p>{</p>
+<p>case SOP_STATE:</p>
+<p>if (ch == MT_UART_SOF) /* MT_UART_SOF 的值默认是 0xFE,所以数</p>
+<p>据必须 FE 格式开始发送才能进入下一个状态，不然永远在这里转圈*/</p>
+<p>state = LEN_STATE;</p>
+<p>break;</p>
+<p>case LEN_STATE:</p>
+<p>LEN_Token = ch;</p>
+<p>tempDataLen = 0;</p>
+<p>/* Allocate memory for the data */</p>
+<p>pMsg = (mtOSALSerialData_t *)osal_msg_allocate( sizeof</p>
+<p>( mtOSALSerialData_t ) +MT_RPC_FRAME_HDR_SZ + LEN_Token );</p>
+<p>/* 分配内存空间*/</p>
+<p>if (pMsg) /* 如果分配成功*/</p>
+<p>{</p>
+<p>/* Fill up what we can */</p>
+<p>pMsg-&gt;hdr.event = CMD_SERIAL_MSG;</p>
+<p>/* 注册事件号 CMD_SERIAL_MSG;，很有用*/</p>
+<p>pMsg-&gt;msg = (uint8*)(pMsg+1);</p>
+<p>/*定位数据位置*/</p>
+<p>...</p>
+<p>...</p>
+<p>...</p>
+<p>/* Make sure it's correct */tmp=MT_UartCalcFCS((uint8*)&amp;pMsg-&gt;msg[0], MT_RPC_FRAME_HDR_SZ</p>
+<p>+ LEN_Token);</p>
+<p>if (tmp == FSC_Token) /*数据校验*/</p>
+<p>{</p>
+<p>osal_msg_send( App_TaskID, (byte *)pMsg );</p>
+<p>/*把数据包发送到 OSAL 层，很很重要*/</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>/* deallocate the msg */</p>
+<p>osal_msg_deallocate ( (uint8 *)pMsg );</p>
+<p>/*清申请的内存空间*/</p>
+<p>}</p>
+<p>/* Reset the state, send or discard the buffers at this point */</p>
+<p>state = SOP_STATE; /*状态机一周期完成*/</p>
+<p>...</p>
+<p>...</p>
+<p>...</p>
+<p>简单看了一下代码，串口从 PC 机接收到信息会做如下处理：</p>
+<p>1、接收串口数据，判断起始码是否为 0xFE</p>
+<p>2、得到数据长度然后给数据包 pMsg 分配内存</p>
+<p>3、给数据包 pMsg 装数据</p>
+<p>4、打包成任务发给上层 OSAL 待处理</p>
+<p>5、释放数据包内存</p>
+<p>所以说，我们想要通过串口发送数据给协调器，就必须按照这个规则来，我们已控制风扇的命令做一下讲解。</p>
+<p>风扇控制命令是00 fe 00 00 01。大家可能会问了，不是以FE开头吗，为什么前面还多了一个00呢？那是因为我在实验的时候，发现在发送fe的时候，协调器所收到的数据并不一定是fe，而在前面加了一个00后，收到的数据就十分稳定了。Fe后面的00代表我们的数据长度为0，因为我们并不需要发送数据。最后两个字节是命令，我们在代码里仅仅判断了最后一个字节。当最后一个字节是01的时候，说明我们是想要控制风扇。</p>
+<p>修改完CMD_SERIAL_MSG事件的代码之后，我们进入SampleApp_MessageMSGCB函数。将其修改成以下：</p>
+<p>void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )</p>
+<p>{</p>
+<p>uint16 flashTime;</p>
+<p>uint8 len;</p>
+<p>switch ( pkt-&gt;clusterId )</p>
+<p>{</p>
+<p>case SAMPLEAPP_PERIODIC_CLUSTERID:</p>
+<p>len=my_strlen((char*)(pkt-&gt;cmd.Data));</p>
+<p>HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据</p>
+<p>break;</p>
+<p>case SAMPLEAPP_FLASH_CLUSTERID:</p>
+<p>flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );</p>
+<p>HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );</p>
+<p>break;</p>
 <p>case SAMPLEAPP_POINT_TO_POINT_CLUSTERID:</p>
-<pre><code>HalUARTWrite(0,&quot;I get point to point data\n&quot;,26);
-HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据
-HalUARTWrite(0, &quot;\n&quot;,1);
-
-break;  
-</code></pre>
-<p>}<br>
-}<br>
-我们看一下代码，事件SAMPLEAPP_PERIODIC_CLUSTERID是接收到广播数据后产生的事件。也就是说收到广播数据后，协调器会通过执行HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len)函数将其打印出来。记得要在程序末尾添加my_strlen函数，并且要声明。<br>
-uint8 my_strlen(char *arr)//指针减法，字符串长度测量<br>
-{<br>
-char *tmp = arr;<br>
-while (*arr)<br>
-{<br>
-arr++;<br>
-}<br>
-return arr - tmp;<br>
-}<br>
-事件SAMPLEAPP_POINT_TO_POINT_CLUSTERID是我们自己定义的事件。按照以往的步骤，打开 SampleApp.c 文件可发现已经存在代码如下：<br>
-afAddrType_t SampleApp_Periodic_DstAddr;<br>
-afAddrType_t SampleApp_Flash_DstAddr;<br>
-分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下（如图3.2.7所示）：<br>
-afAddrType_t Point_To_Point_DstAddr;//点对点通信定义<br>
-提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。<br>
-下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行<br>
-自己的配置。加入如下代码（如图3.2.8所示）：<br>
-// 点对点通讯定义<br>
-Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播<br>
-Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;<br>
-Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器<br>
-第三行的意思是点播的发送对象是 0x0000，也就是协调器的地址。节点和协调器点对点通讯。</p>
-</li>
-</ul>
-<p>图3.2.7</p>
-<p>图3.2.8<br>
-我们在 SampleApp.h 中加入 SAMPLEAPP_POINT_TO_POINT_CLUSTERID 的定义如所示：<br>
-#define SAMPLEAPP_POINT_TO_POINT_CLUSTERID 3//传输编号<br>
-至于如何点对点通信，我们将在后续实验中教大家如何修改。协调器的代码是所有设备中代码最复杂的了，相信了解了协调器的代码之后，剩余的代码对你来说以及不费吹灰之力了。</p>
-<h2 id="322-路由器控制风扇代码修改步骤详解">3.2.2 路由器控制风扇代码修改步骤详解</h2>
-<p>我们打开之前复制好的七个工程所在的目录，我们打开r1 fan文件夹下的工程文件。该工程我们准备作为路由器1的工程。<br>
-打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-否则之后所有的操作都将是徒劳的。如图图3.2.9：</p>
-<p>图3.2.9</p>
+<p>HalUARTWrite(0,&quot;I get point to point data\n&quot;,26);</p>
+<p>HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据</p>
+<p>HalUARTWrite(0, &quot;\n&quot;,1);</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>我们看一下代码，事件SAMPLEAPP_PERIODIC_CLUSTERID是接收到广播数据后产生的事件。也就是说收到广播数据后，协调器会通过执行HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len)函数将其打印出来。记得要在程序末尾添加my_strlen函数，并且要声明。</p>
+<p>uint8 my_strlen(char *arr)//指针减法，字符串长度测量</p>
+<p>{</p>
+<p>char *tmp = arr;</p>
+<p>while (*arr)</p>
+<p>{</p>
+<p>arr++;</p>
+<p>}</p>
+<p>return arr - tmp;</p>
+<p>}</p>
+<p>事件SAMPLEAPP_POINT_TO_POINT_CLUSTERID是我们自己定义的事件。按照以往的步骤，打开 SampleApp.c 文件可发现已经存在代码如下：</p>
+<p>afAddrType_t SampleApp_Periodic_DstAddr;</p>
+<p>afAddrType_t SampleApp_Flash_DstAddr;</p>
+<p>分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下（如图3.2.7所示）：</p>
+<p>afAddrType_t Point_To_Point_DstAddr;//点对点通信定义</p>
+<p>提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。</p>
+<p>下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行</p>
+<p>自己的配置。加入如下代码（如图3.2.8所示）：</p>
+<p>// 点对点通讯定义</p>
+<p>Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播</p>
+<p>Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;</p>
+<p>Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器</p>
+<p>第三行的意思是点播的发送对象是 0x0000，也就是协调器的地址。节点和协调器点对点通讯。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image29.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;0.6861111111111111in&quot;}</p>
+<ol start="27">
+<li></li>
+</ol>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image30.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;1.4354166666666666in&quot;}</p>
+<ol start="28">
+<li></li>
+</ol>
+<p>我们在 SampleApp.h 中加入 SAMPLEAPP_POINT_TO_POINT_CLUSTERID 的定义如所示：</p>
+<p>#define SAMPLEAPP_POINT_TO_POINT_CLUSTERID 3//传输编号</p>
+<p>至于如何点对点通信，我们将在后续实验中教大家如何修改。协调器的代码是所有设备中代码最复杂的了，相信了解了协调器的代码之后，剩余的代码对你来说以及不费吹灰之力了。</p>
+<h3 id="路由器控制风扇代码修改步骤详解">路由器控制风扇代码修改步骤详解</h3>
+<p>我们打开之前复制好的七个工程所在的目录，我们打开r1 fan文件夹下的工程文件。该工程我们准备作为路由器1的工程。</p>
+<p>打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。</p>
+<blockquote>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+</blockquote>
+<p>否则之后所有的操作都将是徒劳的。如图图3.2.9：</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image31.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.1305555555555555in&quot;}</p>
+<ol start="29">
+<li></li>
+</ol>
 <p>然后我们要点击工作环境，选择RouterEB，将其设置成路由器的模式。一定要修改配置，否则将不能使用！如图3.2.10所示：</p>
-<p>图3.2.10<br>
-这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：<br>
-//io初始化<br>
-P0DIR|= 0x83;  //P00、P01定义为输出<br>
-P0_7=0;<br>
-P0_1=0;<br>
-//串口初始化<br>
-MT_UartInit();<br>
-MT_UartRegisterTaskID(task_id);//登记任务号<br>
-与协调器一样，我们需要初始化串口，这样我们就可以自行测试一下路由器的串口会输出什么数据。不仅如此，我们还要初始化引脚P0_7和P0_1，将其设置成输出模式，并且初始化电平为低电平。这样我们就可以控制P0_7和P0_1口的输出电平了，大家可能会问了，我仅仅控制风扇，为什么要使用两个引脚呢？不要着急，根据接下来的步骤你家知道了。与stm32不同的是，cc2530的引脚配置十分简单，只需要配置成为输入或者输出即可。<br>
-我们进入SampleApp_MessageMSGCB函数。将其修改成以下：<br>
-void SampleApp_MessageMSGCB( afIncomingMSGPacket_t <em>pkt )<br>
-{<br>
-uint16 flashTime;<br>
-uint8 len;<br>
-switch ( pkt-&gt;clusterId )<br>
-{<br>
-case SAMPLEAPP_PERIODIC_CLUSTERID:<br>
-len=strlen((char</em>)(pkt-&gt;cmd.Data));<br>
-HalUARTWrite(0,&quot;I get data\n&quot;,11);<br>
-HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据<br>
-if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'a'&amp;&amp;pkt-&gt;cmd.Data[2]=='n')<br>
-{</p>
-<pre><code>     P0_7=!P0_7;
-     P0_1=!P0_1;
-  }
-  break;
-
-case SAMPLEAPP_FLASH_CLUSTERID:
-  flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );
-  HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );
-  break;
-  
-case SAMPLEAPP_POINT_TO_POINT_CLUSTERID:
-  
-  HalUARTWrite(0,&quot;I get point to point data\n&quot;,26);
-  HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据
-  HalUARTWrite(0, &quot;\n&quot;,1);
-
-  break;  
-</code></pre>
-<p>}<br>
-}<br>
-我们看一下代码，事件SAMPLEAPP_PERIODIC_CLUSTERID是接收到广播数据后产生的事件。也就是说收到广播数据后，协调器会判断接收到的数据内容，如果接收到的数据前三个字节为fan，则执行开关风扇的操作，pkt-&gt;cmd.Data为接收到的数据所存放的地址。记得要在程序末尾添加my_strlen函数，并且要声明。<br>
-uint8 my_strlen(char *arr)//指针减法，字符串长度测量<br>
-{<br>
-char *tmp = arr;<br>
-while (<em>arr)<br>
-{<br>
-arr++;<br>
-}<br>
-return arr - tmp;<br>
-}<br>
-SampleApp_SendPeriodicMessage函数要按照之前修改协议栈自带的发送函数一样修改成一下代码<br>
-void SampleApp_SendPeriodicMessage( uint8</em> data,uint8 x )<br>
-{<br>
-if ( AF_DataRequest( &amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,<br>
-SAMPLEAPP_PERIODIC_CLUSTERID,<br>
-x,<br>
-data, //指针方式<br>
-&amp;SampleApp_TransID,<br>
-AF_DISCV_ROUTE,<br>
-AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )<br>
-{<br>
-}<br>
-else<br>
-{<br>
-// Error occurred in request to send.<br>
-}<br>
-}</p>
-<p>图3.2.11<br>
-路由器1的代码就这样修改好了，是不是比协调器的代码修改要简单多了？</p>
-<h2 id="323-路由器点对点通信代码修改步骤详解">3.2.3 路由器点对点通信代码修改步骤详解</h2>
-<p>路由器2是发送点对点数据的，也就是说，只有协调器可以收到点对点数据，其它路由器是无法收到的。<br>
-我们打开之前复制好的七个工程所在的目录，我们打开r2 p2p文件夹下的工程文件。该工程我们准备作为路由器2的工程。<br>
-打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！<br>
-否则之后所有的操作都将是徒劳的。如图3.2.12：</p>
-<p>图3.2.12</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image32.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;4.238194444444445in&quot;}</p>
+<ol start="30">
+<li></li>
+</ol>
+<p>这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：</p>
+<p>//io初始化</p>
+<p>P0DIR|= 0x83; //P00、P01定义为输出</p>
+<p>P0_7=0;</p>
+<p>P0_1=0;</p>
+<p>//串口初始化</p>
+<p>MT_UartInit();</p>
+<p>MT_UartRegisterTaskID(task_id);//登记任务号</p>
+<p>与协调器一样，我们需要初始化串口，这样我们就可以自行测试一下路由器的串口会输出什么数据。不仅如此，我们还要初始化引脚P0_7和P0_1，将其设置成输出模式，并且初始化电平为低电平。这样我们就可以控制P0_7和P0_1口的输出电平了，大家可能会问了，我仅仅控制风扇，为什么要使用两个引脚呢？不要着急，根据接下来的步骤你家知道了。与stm32不同的是，cc2530的引脚配置十分简单，只需要配置成为输入或者输出即可。</p>
+<p>我们进入SampleApp_MessageMSGCB函数。将其修改成以下：</p>
+<p>void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )</p>
+<p>{</p>
+<p>uint16 flashTime;</p>
+<p>uint8 len;</p>
+<p>switch ( pkt-&gt;clusterId )</p>
+<p>{</p>
+<p>case SAMPLEAPP_PERIODIC_CLUSTERID:</p>
+<p>len=strlen((char*)(pkt-&gt;cmd.Data));</p>
+<p>HalUARTWrite(0,&quot;I get data\n&quot;,11);</p>
+<p>HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据</p>
+<p>if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'a'&amp;&amp;pkt-&gt;cmd.Data[2]=='n')</p>
+<p>{</p>
+<p>P0_7=!P0_7;</p>
+<p>P0_1=!P0_1;</p>
+<p>}</p>
+<p>break;</p>
+<p>case SAMPLEAPP_FLASH_CLUSTERID:</p>
+<p>flashTime = BUILD_UINT16(pkt-&gt;cmd.Data[1], pkt-&gt;cmd.Data[2] );</p>
+<p>HalLedBlink( HAL_LED_4, 4, 50, (flashTime / 4) );</p>
+<p>break;</p>
+<p>case SAMPLEAPP_POINT_TO_POINT_CLUSTERID:</p>
+<p>HalUARTWrite(0,&quot;I get point to point data\n&quot;,26);</p>
+<p>HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],10); //打印收到数据</p>
+<p>HalUARTWrite(0, &quot;\n&quot;,1);</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>我们看一下代码，事件SAMPLEAPP_PERIODIC_CLUSTERID是接收到广播数据后产生的事件。也就是说收到广播数据后，协调器会判断接收到的数据内容，如果接收到的数据前三个字节为fan，则执行开关风扇的操作，pkt-&gt;cmd.Data为接收到的数据所存放的地址。记得要在程序末尾添加my_strlen函数，并且要声明。</p>
+<p>uint8 my_strlen(char *arr)//指针减法，字符串长度测量</p>
+<p>{</p>
+<p>char *tmp = arr;</p>
+<p>while (*arr)</p>
+<p>{</p>
+<p>arr++;</p>
+<p>}</p>
+<p>return arr - tmp;</p>
+<p>}</p>
+<p>SampleApp_SendPeriodicMessage函数要按照之前修改协议栈自带的发送函数一样修改成一下代码</p>
+<p>void SampleApp_SendPeriodicMessage( uint8* data,uint8 x )</p>
+<p>{</p>
+<p>if ( AF_DataRequest( &amp;SampleApp_Periodic_DstAddr, &amp;SampleApp_epDesc,</p>
+<p>SAMPLEAPP_PERIODIC_CLUSTERID,</p>
+<p>x,</p>
+<p>data, //指针方式</p>
+<p>&amp;SampleApp_TransID,</p>
+<p>AF_DISCV_ROUTE,</p>
+<p>AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )</p>
+<p>{</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>// Error occurred in request to send.</p>
+<p>}</p>
+<p>}</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image33.png" alt="" loading="lazy">{width=&quot;4.7243055555555555in&quot; height=&quot;2.9902777777777776in&quot;}</p>
+<ol start="31">
+<li></li>
+</ol>
+<p>路由器1的代码就这样修改好了，是不是比协调器的代码修改要简单多了？</p>
+<h3 id="路由器点对点通信代码修改步骤详解">路由器点对点通信代码修改步骤详解</h3>
+<p>路由器2是发送点对点数据的，也就是说，只有协调器可以收到点对点数据，其它路由器是无法收到的。</p>
+<p>我们打开之前复制好的七个工程所在的目录，我们打开r2 p2p文件夹下的工程文件。该工程我们准备作为路由器2的工程。</p>
+<p>打开工程文件后，我们首先将执行最最最重要的一步。如图3.2.2所示。</p>
+<blockquote>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+<p>打开Tools目录下的f8wConfig.cfg文件，将第59行的DZDAPP_CONFIG_PAN_ID修改成与协调器一样的ID号！并且信道修改成与协调器一样！</p>
+</blockquote>
+<p>否则之后所有的操作都将是徒劳的。如图3.2.12：</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image31.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;2.1305555555555555in&quot;}</p>
+<ol start="32">
+<li></li>
+</ol>
 <p>然后我们要点击工作环境，选择RouterEB，将其设置成路由器的模式。一定要修改配置，否则将不能使用！如图3.2.13所示：</p>
-<p>图3.2.13<br>
-这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：<br>
-//串口初始化<br>
-MT_UartInit();<br>
-MT_UartRegisterTaskID(task_id);//登记任务号<br>
-我们做串口初始化的目的仅仅是可以通过串口与电脑相连接，如果不需要可以不必初始化。</p>
-<p>图3.2.14</p>
-<p>如果我们想要进行点对点通信，我们需要自己定义一个新的事件。事件SAMPLEAPP_POINT_TO_POINT_CLUSTERID是我们自己定义的事件。按照以往的步骤，打开 SampleApp.c 文件可发现已经存在代码如下：<br>
-afAddrType_t SampleApp_Periodic_DstAddr;<br>
-afAddrType_t SampleApp_Flash_DstAddr;<br>
-分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下（如图3.2.7所示）：<br>
-afAddrType_t Point_To_Point_DstAddr;//点对点通信定义<br>
-提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。<br>
-下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行<br>
-自己的配置。加入如下代码：<br>
-// 点对点通讯定义<br>
-Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播<br>
-Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;<br>
-Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器<br>
-第三行的意思是点播的发送对象是 0x0000，也就是协调器的地址。节点和协调器点对点通讯。</p>
-<p>图3.2.15</p>
-<p>图3.2.16<br>
-我们在 SampleApp.h 中加入 SAMPLEAPP_POINT_TO_POINT_CLUSTERID 的定义如所示：<br>
-#define SAMPLEAPP_POINT_TO_POINT_CLUSTERID 3//传输编号<br>
-我们接下来仔细讲述一下点对点通信（点播）。<br>
-点播描述的就是网络中 2 个节点相互通信的过程。确定通信对象的就是节点的16bit短地址。下面我们在 SampleApp 例程完通过简单的修改完成单播实验。<br>
-我们打开 AF.h 文件，找到下面代码。</p>
-<p>图3.2.17<br>
-typedef enum<br>
-{<br>
-afAddrNotPresent = AddrNotPresent,<br>
-afAddr16Bit = Addr16Bit,<br>
-afAddr64Bit = Addr64Bit,<br>
-afAddrGroup = AddrGroup,<br>
-afAddrBroadcast = AddrBroadcast<br>
-} afAddrMode_t;<br>
-该类型是一个枚举类型：<br>
-当 addrMode= Addr16Bit 时，对应点播方式；<br>
-当 addrMode= AddrGroup 时，对应组播方式；<br>
-当 addrMode= AddrBroadcast 时，对应广播方式；<br>
-按照以往的步骤，打开 SampleApp.c 文件。<br>
-可发现已经存在代码如下：<br>
-afAddrType_t SampleApp_Periodic_DstAddr;<br>
-afAddrType_t SampleApp_Flash_DstAddr;<br>
-分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下：<br>
-afAddrType_t Point_To_Point_DstAddr;//点对点通信定义<br>
-提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。</p>
-<p>图3.2.18<br>
-下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行 自己的配置。加入如下代码（如图3.2.19）：<br>
-// 点对点通讯定义<br>
-Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播<br>
-Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;<br>
-Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器</p>
-<p>图3.2.19<br>
-继续添加自己的点对点发送函数，在 SampleAPP.c 最后加入下面代码，如-+所示：<br>
-void SampleApp_SendPointToPointMessage( void )<br>
-{<br>
-uint8 data[10]={0,1,2,3,4,5,6,7,8,9};<br>
-if ( AF_DataRequest( &amp;Point_To_Point_DstAddr,<br>
-&amp;SampleApp_epDesc,<br>
-SAMPLEAPP_POINT_TO_POINT_CLUSTERID,<br>
-10,<br>
-data,<br>
-&amp;SampleApp_TransID,<br>
-AF_DISCV_ROUTE,<br>
-AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )<br>
-{<br>
-}<br>
-else<br>
-{<br>
-// Error occurred in request to send.<br>
-}<br>
-}<br>
-对于接收方面，我们已经在协调器进行修改了，即接收 ID 我们在原来基础上改成我们刚定义的 SAMPLEAPP_POINT_TO_POINT_CLUSTERID。<br>
-接下来为了测试我们的程序，我们把之前中SampleApp.c文件中的 SampleApp_SendPeriodicMessage();函数替换成我们刚刚建立的点 对点发送函数 SampleApp_SendPointToPointMessage();这样的话就能实现周期性点播发送数据了。</p>
-<p>图3.2.20<br>
-实验现象如图3.2.21：</p>
-<p>图3.2.21 点对点实验现象<br>
-路由器2的修改步骤就是这样，以后在使用的时候，我们也可以把点对点发送函数修改成之前广播发送一样，可以发送任意字符串。</p>
-<h2 id="324-路由器广播通信代码修改步骤详解">3.2.4 路由器广播通信代码修改步骤详解</h2>
-<p>路由器3的代码是所有路由器的代码里最简单的，因为路由器3仅仅是每隔一段时间发送I am r3给协调器。告诉协调器自己连接上了。而其它每一块板都有定时发送信息给协调器，为了方便大家实验，我们直接使用修改好的路由器1的代码。<br>
-我们首先删除r3的文件夹，重新复制一份r1的文件夹并且重命名为r3。我们打开工程文件，老规矩，我们进入SampleAPP.c。找到SampleApp_ProcessEvent函数，这是用户自定义的任务轮询的函数。然后我们找到风扇定时发送I am fan那句话给协调器的函数。，把其中的文字修改成I am r3。</p>
-<p>图3.2.22<br>
-我们可以把这句话修改成其它我们想要发送的内容。也可以发送汉字，大家可以试着修改成其它内容。学到这里，是不是感觉zigbee的实验越来越简单了呢？</p>
-<h2 id="325-路由器控制震动器代码修改步骤详解">3.2.5 路由器控制震动器代码修改步骤详解</h2>
-<p>我们在做路由器控制风扇的时候，可能就会问了，我控制风扇仅仅只用了一个引脚，为什么我初始化了两个引脚呢？现在就来告诉大家，为了方便大家实验，我们使用路由器控制风扇的工程，仅仅做简单的修改就可以控制震动器了，因为我们的风扇和震动器使用到的引脚不相同，所以我们在初始化的时候直接同时初始化了两个引脚。<br>
-现在我们将r4 motor文件夹删去，然后拷贝一份r1 fan文件夹并且命名为r4 motor。</p>
-<p>图3.2.23 删去r4 motor<br>
-然后我们打开r4 motor的工程文件，进入SampleApp_MessageMSGCB函数，将if后面的数据由if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'a'&amp;&amp;pkt-&gt;cmd.Data[2]<mark>'n')修改成为if(pkt-&gt;cmd.Data[0]</mark>'m'&amp;&amp;pkt-&gt;cmd.Data[1]<mark>'o'&amp;&amp;pkt-&gt;cmd.Data[2]</mark>'t')。</p>
-<p>图3.2.24 修改前</p>
-<p>图3.2.25 修改后<br>
-这样我们就可以把代码烧录进开发板了。</p>
-<h2 id="326-路由器控制火焰传感器代码修改步骤详解">3.2.6 路由器控制火焰传感器代码修改步骤详解</h2>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image32.png" alt="" loading="lazy">{width=&quot;3.1493055555555554in&quot; height=&quot;4.238194444444445in&quot;}</p>
+<ol start="33">
+<li></li>
+</ol>
+<p>这两步完成后，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，在其第四行后加入以下代码：</p>
+<p>//串口初始化</p>
+<p>MT_UartInit();</p>
+<p>MT_UartRegisterTaskID(task_id);//登记任务号</p>
+<p>我们做串口初始化的目的仅仅是可以通过串口与电脑相连接，如果不需要可以不必初始化。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image34.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;1.145138888888889in&quot;}</p>
+<ol start="34">
+<li></li>
+</ol>
+<p>如果我们想要进行点对点通信，我们需要自己定义一个新的事件。事件SAMPLEAPP_POINT_TO_POINT_CLUSTERID是我们自己定义的事件。按照以往的步骤，打开 SampleApp.c 文件可发现已经存在代码如下：</p>
+<p>afAddrType_t SampleApp_Periodic_DstAddr;</p>
+<p>afAddrType_t SampleApp_Flash_DstAddr;</p>
+<p>分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下（如图3.2.7所示）：</p>
+<p>afAddrType_t Point_To_Point_DstAddr;//点对点通信定义</p>
+<p>提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。</p>
+<p>下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行</p>
+<p>自己的配置。加入如下代码：</p>
+<p>// 点对点通讯定义</p>
+<p>Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播</p>
+<p>Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;</p>
+<p>Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器</p>
+<p>第三行的意思是点播的发送对象是 0x0000，也就是协调器的地址。节点和协调器点对点通讯。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image29.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;0.6861111111111111in&quot;}</p>
+<ol start="35">
+<li></li>
+</ol>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image30.png" alt="" loading="lazy">{width=&quot;3.9368055555555554in&quot; height=&quot;1.4354166666666666in&quot;}</p>
+<ol start="36">
+<li></li>
+</ol>
+<p>我们在 SampleApp.h 中加入 SAMPLEAPP_POINT_TO_POINT_CLUSTERID 的定义如所示：</p>
+<p>#define SAMPLEAPP_POINT_TO_POINT_CLUSTERID 3//传输编号</p>
+<p>我们接下来仔细讲述一下点对点通信（点播）。</p>
+<p>点播描述的就是网络中 2 个节点相互通信的过程。确定通信对象的就是节点的16bit短地址。下面我们在 SampleApp 例程完通过简单的修改完成单播实验。</p>
+<p>我们打开 AF.h 文件，找到下面代码。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image35.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.9743055555555555in&quot;}</p>
+<ol start="37">
+<li></li>
+</ol>
+<p>typedef enum</p>
+<p>{</p>
+<p>afAddrNotPresent = AddrNotPresent,</p>
+<p>afAddr16Bit = Addr16Bit,</p>
+<p>afAddr64Bit = Addr64Bit,</p>
+<p>afAddrGroup = AddrGroup,</p>
+<p>afAddrBroadcast = AddrBroadcast</p>
+<p>} afAddrMode_t;</p>
+<p>该类型是一个枚举类型：</p>
+<p>当 addrMode= Addr16Bit 时，对应点播方式；</p>
+<p>当 addrMode= AddrGroup 时，对应组播方式；</p>
+<p>当 addrMode= AddrBroadcast 时，对应广播方式；</p>
+<p>按照以往的步骤，打开 SampleApp.c 文件。</p>
+<p>可发现已经存在代码如下：</p>
+<p>afAddrType_t SampleApp_Periodic_DstAddr;</p>
+<p>afAddrType_t SampleApp_Flash_DstAddr;</p>
+<p>分别是组播和广播前面的定义。我们按照格式来添加自己的点播如下：</p>
+<p>afAddrType_t Point_To_Point_DstAddr;//点对点通信定义</p>
+<p>提示：go to definition of afAddrType_t 可以找到刚才的枚举内容。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image36.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;0.875in&quot;}</p>
+<ol start="38">
+<li></li>
+</ol>
+<p>下边我们对 Point_To_Point_DstAddr 一些参数进行配置，找到下面的位置，参考 SampleApp_Periodic_DstAddr 和 SampleApp_Flash_DstAddr 我们进行 自己的配置。加入如下代码（如图3.2.19）：</p>
+<p>// 点对点通讯定义</p>
+<p>Point_To_Point_DstAddr.addrMode = (afAddrMode_t)Addr16Bit;//点播</p>
+<p>Point_To_Point_DstAddr.endPoint = SAMPLEAPP_ENDPOINT;</p>
+<p>Point_To_Point_DstAddr.addr.shortAddr = 0x0000; //发给协调器</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image37.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.061111111111111in&quot;}</p>
+<ol start="39">
+<li></li>
+</ol>
+<p>继续添加自己的点对点发送函数，在 SampleAPP.c 最后加入下面代码，如-+所示：</p>
+<p>void SampleApp_SendPointToPointMessage( void )</p>
+<p>{</p>
+<p>uint8 data[10]={0,1,2,3,4,5,6,7,8,9};</p>
+<p>if ( AF_DataRequest( &amp;Point_To_Point_DstAddr,</p>
+<p>&amp;SampleApp_epDesc,</p>
+<p>SAMPLEAPP_POINT_TO_POINT_CLUSTERID,</p>
+<p>10,</p>
+<p>data,</p>
+<p>&amp;SampleApp_TransID,</p>
+<p>AF_DISCV_ROUTE,</p>
+<p>AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )</p>
+<p>{</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>// Error occurred in request to send.</p>
+<p>}</p>
+<p>}</p>
+<p>对于接收方面，我们已经在协调器进行修改了，即接收 ID 我们在原来基础上改成我们刚定义的 SAMPLEAPP_POINT_TO_POINT_CLUSTERID。</p>
+<p>接下来为了测试我们的程序，我们把之前中SampleApp.c文件中的 SampleApp_SendPeriodicMessage();函数替换成我们刚刚建立的点 对点发送函数 SampleApp_SendPointToPointMessage();这样的话就能实现周期性点播发送数据了。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image38.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.575in&quot;}</p>
+<ol start="40">
+<li></li>
+</ol>
+<p>实验现象如图3.2.21：</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image39.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.1256944444444446in&quot;}</p>
+<ol start="41">
+<li>点对点实验现象</li>
+</ol>
+<p>路由器2的修改步骤就是这样，以后在使用的时候，我们也可以把点对点发送函数修改成之前广播发送一样，可以发送任意字符串。</p>
+<h3 id="路由器广播通信代码修改步骤详解">路由器广播通信代码修改步骤详解</h3>
+<p>路由器3的代码是所有路由器的代码里最简单的，因为路由器3仅仅是每隔一段时间发送I am r3给协调器。告诉协调器自己连接上了。而其它每一块板都有定时发送信息给协调器，为了方便大家实验，我们直接使用修改好的路由器1的代码。</p>
+<p>我们首先删除r3的文件夹，重新复制一份r1的文件夹并且重命名为r3。我们打开工程文件，老规矩，我们进入SampleAPP.c。找到SampleApp_ProcessEvent函数，这是用户自定义的任务轮询的函数。然后我们找到风扇定时发送I am fan那句话给协调器的函数。，把其中的文字修改成I am r3。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image40.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.466666666666667in&quot;}</p>
+<ol start="42">
+<li></li>
+</ol>
+<p>我们可以把这句话修改成其它我们想要发送的内容。也可以发送汉字，大家可以试着修改成其它内容。学到这里，是不是感觉zigbee的实验越来越简单了呢？</p>
+<h3 id="路由器控制震动器代码修改步骤详解">路由器控制震动器代码修改步骤详解</h3>
+<p>我们在做路由器控制风扇的时候，可能就会问了，我控制风扇仅仅只用了一个引脚，为什么我初始化了两个引脚呢？现在就来告诉大家，为了方便大家实验，我们使用路由器控制风扇的工程，仅仅做简单的修改就可以控制震动器了，因为我们的风扇和震动器使用到的引脚不相同，所以我们在初始化的时候直接同时初始化了两个引脚。</p>
+<p>现在我们将r4 motor文件夹删去，然后拷贝一份r1 fan文件夹并且命名为r4 motor。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image41.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="43">
+<li>删去r4 motor</li>
+</ol>
+<p>然后我们打开r4 motor的工程文件，进入SampleApp_MessageMSGCB函数，将if后面的数据由if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'a'&amp;&amp;pkt-&gt;cmd.Data[2]<mark>'n')修改成为if(pkt-&gt;cmd.Data[0]</mark>'m'&amp;&amp;pkt-&gt;cmd.Data[1]<mark>'o'&amp;&amp;pkt-&gt;cmd.Data[2]</mark>'t')。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image42.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;3.0701388888888888in&quot;}</p>
+<ol start="44">
+<li>修改前</li>
+</ol>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image43.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.404861111111111in&quot;}</p>
+<ol start="45">
+<li>修改后</li>
+</ol>
+<p>这样我们就可以把代码烧录进开发板了。</p>
+<h3 id="路由器控制火焰传感器代码修改步骤详解">路由器控制火焰传感器代码修改步骤详解</h3>
 <p>为了方便大家实验，我们依然实验路由器控制风扇的代码来进行修改。现在我们将r5 flame文件夹删去，然后拷贝一份r1 fan文件夹并且命名为r5 flame。</p>
-<p>图3.2.26 删去r5 flame<br>
-然后我们打开r5 flame的工程文件，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，将IO初始化修改为：<br>
-P0DIR|= 0x00;  //P00、P01定义为输入</p>
-<p>图3.2.27 修改前</p>
-<p>图3.2.28 修改后<br>
-然后我们进入SampleApp_MessageMSGCB函数，然后我们修改SAMPLEAPP_PERIODIC_CLUSTERID事件下的内容：<br>
-len=strlen((char*)(pkt-&gt;cmd.Data));<br>
-HalUARTWrite(0,&quot;I get data\n&quot;,11);<br>
-HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据<br>
-if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'l'&amp;&amp;pkt-&gt;cmd.Data[2]<mark>'a')<br>
-{<br>
-if(P0_1</mark>0)<br>
-{<br>
-SampleApp_SendPeriodicMessage(&quot;on fire\n&quot;,9);//发送火焰传感器信息<br>
-}<br>
-else<br>
-{<br>
-SampleApp_SendPeriodicMessage(&quot;not on fire\n&quot;,13);//发送火焰传感器信息<br>
-}<br>
-}</p>
-<p>图3.2.29 修改前</p>
-<p>图3.2.30 修改后<br>
-这样我们的路由器控制火焰传感器的代码就修改好了，可以把代码烧录到开发板中。</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image44.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.5833333333333335in&quot;}</p>
+<ol start="46">
+<li>删去r5 flame</li>
+</ol>
+<p>然后我们打开r5 flame的工程文件，我们打开App目录下的SampleApp.c文件，找到SampleApp_Init函数，将IO初始化修改为：</p>
+<p>P0DIR|= 0x00; //P00、P01定义为输入</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image45.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;2.0708333333333333in&quot;}</p>
+<ol start="47">
+<li>修改前</li>
+</ol>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image46.png" alt="" loading="lazy">{width=&quot;5.511805555555555in&quot; height=&quot;1.4270833333333333in&quot;}</p>
+<ol start="48">
+<li>修改后</li>
+</ol>
+<p>然后我们进入SampleApp_MessageMSGCB函数，然后我们修改SAMPLEAPP_PERIODIC_CLUSTERID事件下的内容：</p>
+<p>len=strlen((char*)(pkt-&gt;cmd.Data));</p>
+<p>HalUARTWrite(0,&quot;I get data\n&quot;,11);</p>
+<p>HalUARTWrite(0, &amp;pkt-&gt;cmd.Data[0],len); //打印收到数据</p>
+<p>if(pkt-&gt;cmd.Data[0]<mark>'f'&amp;&amp;pkt-&gt;cmd.Data[1]</mark>'l'&amp;&amp;pkt-&gt;cmd.Data[2]=='a')</p>
+<p>{</p>
+<p>if(P0_1==0)</p>
+<p>{</p>
+<p>SampleApp_SendPeriodicMessage(&quot;on fire\n&quot;,9);//发送火焰传感器信息</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>SampleApp_SendPeriodicMessage(&quot;not on fire\n&quot;,13);//发送火焰传感器信息</p>
+<p>}</p>
+<p>}</p>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image47.png" alt="" loading="lazy">{width=&quot;5.759722222222222in&quot; height=&quot;1.2791666666666666in&quot;}</p>
+<ol start="49">
+<li>修改前</li>
+</ol>
+<p><img src="file://C:/Users/zihao/Documents/Gridea/zigbee2.5%E5%9B%BE%E7%89%87/image48.png" alt="" loading="lazy">{width=&quot;5.7659722222222225in&quot; height=&quot;2.370833333333333in&quot;}</p>
+<ol start="50">
+<li>修改后</li>
+</ol>
+<p>这样我们的路由器控制火焰传感器的代码就修改好了，可以把代码烧录到开发板中。</p>
 
             </div>
           </article>
@@ -850,7 +1030,7 @@ SampleApp_SendPeriodicMessage(&quot;not on fire\n&quot;,13);//发送火焰传感
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://kingingwang.github.io//images/avatar.png?v=1586605720710" class="no-responsive avatar">
+    <img src="https://kingingwang.github.io//images/avatar.png?v=1586614488972" class="no-responsive avatar">
     <div class="text-muted">时时勤拂拭，勿使染尘埃</div>
     <div class="social-container">
       
@@ -930,7 +1110,7 @@ SampleApp_SendPeriodicMessage(&quot;not on fire\n&quot;,13);//发送火焰传感
     </div>
     <div class="row">
       
-        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge secondary">
+        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge warning">
           zigbee
         </a>
       
