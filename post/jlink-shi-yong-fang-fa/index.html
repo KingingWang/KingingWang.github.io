@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>JLink使用方法 | KingingWang</title>
+<meta name="description" content="时时勤拂拭，勿使染尘埃">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://kingingwang.github.io//favicon.ico?v=1586676733950">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://kingingwang.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://kingingwang.github.io/">KingingWang</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                列表
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>JLink使用方法</h1>
+            <p class="article-meta">
+              2020-04-12
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="j-link介绍">J-LINK介绍</h1>
+<p>J-Link是SEGGER公司为支持仿真ARM内核芯片推出的JTAG仿真器。配合IAR EWARM，ADS，KEIL，WINARM，RealView等集成开发环境支持所有ARM7/ARM9内核芯片的仿真，通过RDI接口和各集成开发环境无缝连接，操作方便、连接方便、简单易学，是学习开发ARM最好最实用的开发工具。</p>
+<h1 id="j-link连线">J-Link连线</h1>
+<p>如图2.1.1所示，左侧为Micro USB接口，与电脑相连接，右侧为SW接口，连接至单片机。引脚名称从上到下分别为：</p>
+<ol>
+<li>
+<p>VCC 接单片机的3.3V</p>
+</li>
+<li>
+<p>SWDIO 接单片机的PA13引脚</p>
+</li>
+<li>
+<p>SWCLK 接单片机的PA14引脚</p>
+</li>
+<li>
+<p>GND 接单片机的GND</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage3.png" alt="" loading="lazy"></figure>
+<ol>
+<li>J-Link实物图</li>
+</ol>
+<p>以stm32f407vet6核心板为例，其调试引脚在JTAG接口中引出。第一列第四个为SWDIO引脚，第一列第五个为SWCLK，第二列第一个为VCC，第二列其他全部是GND。</p>
+<figure data-type="image" tabindex="2"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage4.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>核心板JTAG接口</li>
+</ol>
+<h1 id="j-link驱动安装">J-Link驱动安装</h1>
+<p>windows10会自动安装其驱动程序，其他系统则需要手动安装，双击JLink_Windows_V646c.exe程序。点击next。</p>
+<figure data-type="image" tabindex="3"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage5.png" alt="" loading="lazy"></figure>
+<ol start="3">
+<li>点击next</li>
+</ol>
+<p>然后点击I AGREE</p>
+<figure data-type="image" tabindex="4"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage6.png" alt="" loading="lazy"></figure>
+<ol start="4">
+<li>点击I AGREE</li>
+</ol>
+<p>然后点击install</p>
+<figure data-type="image" tabindex="5"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage7.png" alt="" loading="lazy"></figure>
+<ol start="5">
+<li>点击install</li>
+</ol>
+<p>等待安装完成，连上单片机后，打开keil。在debug中选择JLink。</p>
+<figure data-type="image" tabindex="6"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage8.png" alt="" loading="lazy"></figure>
+<ol start="6">
+<li>选择jlink</li>
+</ol>
+<p>然后点击右侧的setting，确认port是否为SW。</p>
+<figure data-type="image" tabindex="7"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage9.png" alt="" loading="lazy"></figure>
+<ol start="7">
+<li>确认port</li>
+</ol>
+<p>然后点击flash download，确认是否把stm32f4xx 512KB flash添加进去。</p>
+<figure data-type="image" tabindex="8"><img src="https://kingingwang.github.io//post-images/jlinkshiyongimage10.png" alt="" loading="lazy"></figure>
+<ol start="8">
+<li>确认编程算法</li>
+</ol>
+<p>一切都正常之后，即可进行烧录。烧录方法为点击<img src="https://kingingwang.github.io//post-images/jlinkshiyongimage12.png" alt="" loading="lazy">。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/">
+                <h3 class="post-title">
+                  51单片机与proteus学习记录
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="gitalk-container"></div>
+            </div>
+          
+
+          
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://kingingwang.github.io//images/avatar.png?v=1586676733950" class="no-responsive avatar">
+    <div class="text-muted">时时勤拂拭，勿使染尘埃</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/jlink-shi-yong-fang-fa/">JLink使用方法</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/">51单片机与proteus学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/">ESP8266学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/">STM32F429学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/">STM32F407学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/">STM32F103学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/">Z-Stack3.0学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/">Z-Stack2.5学习记录</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://kingingwang.github.io/post/about/">关于</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://kingingwang.github.io/tag/J2yw27l4t/" class="badge warning">
+          zigbee
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     | <a class="rss" href="https://kingingwang.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
