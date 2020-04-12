@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kingingwang.github.io/</id>
     <title>KingingWang</title>
-    <updated>2020-04-12T07:36:45.683Z</updated>
+    <updated>2020-04-12T07:37:52.644Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kingingwang.github.io/"/>
     <link rel="self" href="https://kingingwang.github.io/atom.xml"/>
@@ -78,65 +78,11 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[51单片机与proteus学习记录]]></title>
-        <id>https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T01:20:52.000Z</updated>
-        <content type="html"><![CDATA[<p>51</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ESP8266学习记录]]></title>
-        <id>https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T01:02:43.000Z</updated>
-        <content type="html"><![CDATA[<p>以后做</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[STM32F429学习记录]]></title>
-        <id>https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T01:02:19.000Z</updated>
-        <content type="html"><![CDATA[<p>以后做</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[STM32F407学习记录]]></title>
-        <id>https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T01:01:31.000Z</updated>
-        <content type="html"><![CDATA[<p>以后做</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[STM32F103学习记录]]></title>
-        <id>https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T01:00:58.000Z</updated>
-        <content type="html"><![CDATA[<p>有时间做</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Z-Stack3.0学习记录]]></title>
-        <id>https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/</id>
-        <link href="https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/">
-        </link>
-        <updated>2020-04-11T00:56:05.000Z</updated>
-        <content type="html"><![CDATA[<p>有時間再搞</p>
-]]></content>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[Z-Stack2.5学习记录]]></title>
         <id>https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/</id>
         <link href="https://kingingwang.github.io/post/zigbee-xue-xi-ji-lu/">
         </link>
-        <updated>2020-04-10T14:48:31.000Z</updated>
+        <updated>2020-04-13T01:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1 id="zigbee介绍">Zigbee介绍</h1>
 <h2 id="zigbee-简介">ZigBee 简介</h2>
 <p>Zigbee 是基于 IEEE802.15.4 标准的低功耗个域网协议。根据这个协议规定的技术是一种短距离、低功耗的无线通信技术。这一名称来源于蜜蜂的八字舞，由于蜜蜂(bee)是靠飞翔和&quot;嗡嗡&quot;(zig)地抖动翅膀的&quot;舞蹈&quot;来与同伴传递花粉所在方位信息，也就是说蜜蜂依靠这样的方式构成了群体中的通信网络。其特点是近距离、低复杂度、自组织、低功耗、低数据速率、低成本。主要适合用于自动控制和远程控制领域，可以嵌入各种设备。简而言之，ZigBee 就是一种便宜的，低功耗的近距离无线组网通讯技术。国内通常会翻译成&quot;紫蜂&quot;。</p>
@@ -1007,6 +953,60 @@
 <li>修改后</li>
 </ol>
 <p>这样我们的路由器控制火焰传感器的代码就修改好了，可以把代码烧录到开发板中。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[51单片机与proteus学习记录]]></title>
+        <id>https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/51-dan-pian-ji-yu-proteus-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:20:52.000Z</updated>
+        <content type="html"><![CDATA[<p>51</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ESP8266学习记录]]></title>
+        <id>https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/esp8266-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:02:43.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F429学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f429-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:02:19.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F407学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f407-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:01:31.000Z</updated>
+        <content type="html"><![CDATA[<p>以后做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[STM32F103学习记录]]></title>
+        <id>https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/stm32f103-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T01:00:58.000Z</updated>
+        <content type="html"><![CDATA[<p>有时间做</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Z-Stack3.0学习记录]]></title>
+        <id>https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/</id>
+        <link href="https://kingingwang.github.io/post/z-stack30-xue-xi-ji-lu/">
+        </link>
+        <updated>2020-04-11T00:56:05.000Z</updated>
+        <content type="html"><![CDATA[<p>有時間再搞</p>
 ]]></content>
     </entry>
 </feed>
